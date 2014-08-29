@@ -72,13 +72,12 @@ Once you have done these, from now on, whenever you want to update to a new vers
 1. Download and install the new version of R
 2. Open your new R and run the following codes
 
-```
+{% highlight R %}
 source("http://www.r-statistics.com/wp-content/uploads/2010/04/upgrading-R-on-windows.r.txt")
 New.R.RunMe()
-```
+{% endhighlight %}
 
 That's all. I hope it helps. Thank you! O(∩_∩)O
-
 
 
 
