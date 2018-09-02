@@ -1,0 +1,50 @@
+---
+title: Mode, Type and Class of R objects
+author: Xiaojun Sun
+date: '2014-10-12'
+slug: mode-type-and-class-of-r-objects
+categories:
+  - R
+tags:
+  - tutorial
+---
+
+
+
+<p>In the R training class, some students are confused about the <code>mode</code>, <code>type</code> and <code>class</code> in R language definition. So I write this post to clarify this question.</p>
+<div id="mode-type" class="section level2">
+<h2>Mode, Type</h2>
+<p><code>mode</code> and <code>storage.mode</code> are the old-style types (where storage.mode is more accurate), and <code>typeof</code> is the newer, even more accurate version. <code>typeof</code> determines the (R internal) type or storage mode of any object.</p>
+<p><code>mode</code> and <code>storage.mode</code> get or set the type or storage mode of an object, both relying on the output of <code>typeof(x)</code>.</p>
+<p>R objects are often coerced to different types during computations. There are also many functions available to perform explicit coercion. When programming in the R language the type of an object generally doesn’t affect the computations, however, when dealing with foreign languages or the operating system it is often necessary to ensure that an object is of the correct type.</p>
+</div>
+<div id="class" class="section level2">
+<h2>Class</h2>
+<p>R possesses a simple generic function mechanism which can be used for an object-oriented style of programming. Method dispatch takes place based on the class of the first argument to the generic function. An object can have any class and more than one class. The class can be created by you.</p>
+<p><code>class</code> is mostly just the class attribute of an object. But when the class attribute is not set, the class function makes up a class from the object type and the dim attribute.</p>
+<pre class="r"><code>class(3L) # integer</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<pre class="r"><code>class(structure(3L, dim=1)) # array</code></pre>
+<pre><code>## [1] &quot;array&quot;</code></pre>
+<pre class="r"><code>class(structure(3L, dim=c(1,1))) # matrix</code></pre>
+<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<pre class="r"><code>class(list(1)) # list</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>class(structure(list(1), dim=1)) # array</code></pre>
+<pre><code>## [1] &quot;array&quot;</code></pre>
+<pre class="r"><code>class(structure(list(1), dim=c(1,1))) # matrix</code></pre>
+<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<pre class="r"><code>class(structure(list(1), dim=1, class=&#39;ABC&#39;)) # ABC</code></pre>
+<pre><code>## [1] &quot;ABC&quot;</code></pre>
+<pre class="r"><code>x &lt;- 1:5
+class(x) &lt;- &quot;A&quot;
+attr(x, &quot;class&quot;) &lt;- c(&quot;A&quot;,&quot;B&quot;)
+class(x)</code></pre>
+<pre><code>## [1] &quot;A&quot; &quot;B&quot;</code></pre>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p><a href="http://stat.ethz.ch/R-manual/R-devel/doc/manual/R-lang.html#Objects">R language definition-Objects</a></p>
+<p><a href="http://stats.stackexchange.com/questions/3212/mode-class-and-type-of-r-objects">StackExchange discussion 1</a></p>
+<p><a href="http://stackoverflow.com/questions/8855589/a-comprehensive-survey-of-the-types-of-things-in-r-mode-and-class-and-type">StackExchange discussion 2</a></p>
+</div>

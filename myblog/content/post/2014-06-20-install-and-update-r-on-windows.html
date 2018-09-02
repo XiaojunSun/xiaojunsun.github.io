@@ -1,0 +1,75 @@
+---
+title: Install and Update R on Windows
+author: Xiaojun Sun
+date: '2014-06-20'
+slug: install-and-update-r-on-windows
+categories:
+  - R
+tags:
+  - tutorial
+---
+
+
+
+<p>R is a language and environment for statistical computing and graphics. It is widely used around the world. Here I briefly describe the steps to install and upgrade R for R beginners. This post is written for Windows user. If you use Mac, please search Google for instruction. If you have already installed R on your computer, you can jump to step two.</p>
+<div id="step-1-install-r-and-rstudio" class="section level2">
+<h2>Step 1: Install R and Rstudio</h2>
+<p>The latest version of R can be download from <a href="http://mirrors.xmu.edu.cn/CRAN/">CRAN</a>. Rstudio Desktop can be download from it’s <a href="http://www.rstudio.com/products/rstudio/download/">official site</a>.</p>
+<div class="figure">
+<img src="http://i.imgbox.com/IHpsi4Gn.png" title="Download Rstudio" alt="Rstudio" />
+<p class="caption">Rstudio</p>
+</div>
+<div id="install-r" class="section level3">
+<h3>Install R</h3>
+<p>You should set up a folder named <code>R</code> at the directory where you want to install R in. The path should look like <code>G:\Program Files\R\R-3.1.0</code> which is shown in the graph below.</p>
+<div class="figure">
+<img src="http://i.imgbox.com/IRTRIvg5.jpg" title="Choose directory to install R" alt="installR01" />
+<p class="caption">installR01</p>
+</div>
+<p>Choose according to you PC operation system.</p>
+<div class="figure">
+<img src="http://i.imgbox.com/fo9YGrzg.jpg" title="Choose according to you PC system" alt="installR02" />
+<p class="caption">installR02</p>
+</div>
+<p>If you install it successfully, you open R and will see this:</p>
+<div class="figure">
+<img src="http://i.imgbox.com/5aw3DW4B.jpg" title="R windows" alt="installR03" />
+<p class="caption">installR03</p>
+</div>
+</div>
+<div id="install-rstudio-desktop" class="section level3">
+<h3>Install Rstudio Desktop</h3>
+<p>Choose directory to install Rstudio.</p>
+<div class="figure">
+<img src="http://i.imgbox.com/exN40Tst.jpg" title="Choose directory to install Rstudio" alt="installRstudion1" />
+<p class="caption">installRstudion1</p>
+</div>
+<p>Open Rstudio you will see this.</p>
+<div class="figure">
+<img src="http://i.imgbox.com/W5BWO12s.jpg" title="Rstudio Interface" alt="installRstudion2" />
+<p class="caption">installRstudion2</p>
+</div>
+</div>
+</div>
+<div id="step-2-upgrade-r" class="section level2">
+<h2>Step 2: Upgrade R</h2>
+<p>Now we set up the global library for R. More details about this is described in <a href="http://www.r-statistics.com/2010/04/changing-your-r-upgrading-strategy-and-the-r-code-to-do-it-on-windows/">Tal Galili’s blog post</a>. Although you are using the latest version of R, you can still follow my steps. It will help you set a global library for R. This will prevent some troubles in the future.</p>
+<p>Open your R. Run <code>chooseCRANmirror()</code> command line(Type it and hit <code>ENTER</code>) .Choose <code>China(Xiamen)</code>.</p>
+<p><a href="http://i.imgbox.com/nMC12nzx.jpg" title="Choose Mirror">mirror</a></p>
+<p>Run the following codes line by line.</p>
+<pre class="r"><code>source(&quot;http://www.r-statistics.com/wp-content/uploads/2010/04/upgrading-R-on-windows.r.txt&quot;)
+Old.R.RunMe()</code></pre>
+<div class="figure">
+<img src="http://i.imgbox.com/yn5SmnIH.jpg" title="Set global lib" alt="oldr" />
+<p class="caption">oldr</p>
+</div>
+<p>It will ask you whether or not to quit R. Just type <code>n</code> and hit <code>ENTER</code>. Then run <code>New.R.RunMe()</code> just the same way.</p>
+<p>Once you have done these, from now on, whenever you want to update to a new version of R in the future, all you will need to do are the following <strong>TWO</strong> steps:</p>
+<ol style="list-style-type: decimal">
+<li>Download and install the new version of R</li>
+<li>Open your new R and run the following codes</li>
+</ol>
+<pre class="r"><code>source(&quot;http://www.r-statistics.com/wp-content/uploads/2010/04/upgrading-R-on-windows.r.txt&quot;)
+New.R.RunMe()</code></pre>
+<p>That’s all. I hope it helps. Thank you! O(∩_∩)O</p>
+</div>

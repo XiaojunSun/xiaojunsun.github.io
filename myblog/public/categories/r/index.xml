@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on A Hugo website</title>
+    <link>/categories/r/</link>
+    <description>Recent content in R on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hello, R Markdown</title>
+      <link>/2018/09/02/hello-r-markdown/</link>
+      <pubDate>Sun, 02 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/02/hello-r-markdown/</guid>
+      <description>x &amp;lt;- LETTERS[1:5]print(x)## [1] &amp;quot;A&amp;quot; &amp;quot;B&amp;quot; &amp;quot;C&amp;quot; &amp;quot;D&amp;quot; &amp;quot;E&amp;quot;plot(rnorm(10))Inset a logo:
+</description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>/2015/07/23/hello-r-markdown/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>/2015/07/23/hello-r-markdown/</guid>
+      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+    <item>
+      <title>Mode, Type and Class of R objects</title>
+      <link>/2014/10/12/mode-type-and-class-of-r-objects/</link>
+      <pubDate>Sun, 12 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/10/12/mode-type-and-class-of-r-objects/</guid>
+      <description>In the R training class, some students are confused about the mode, type and class in R language definition. So I write this post to clarify this question.
+Mode, Typemode and storage.mode are the old-style types (where storage.mode is more accurate), and typeof is the newer, even more accurate version. typeof determines the (R internal) type or storage mode of any object.
+mode and storage.mode get or set the type or storage mode of an object, both relying on the output of typeof(x).</description>
+    </item>
+    
+    <item>
+      <title>Install and Update R on Windows</title>
+      <link>/2014/06/20/install-and-update-r-on-windows/</link>
+      <pubDate>Fri, 20 Jun 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/06/20/install-and-update-r-on-windows/</guid>
+      <description>R is a language and environment for statistical computing and graphics. It is widely used around the world. Here I briefly describe the steps to install and upgrade R for R beginners. This post is written for Windows user. If you use Mac, please search Google for instruction. If you have already installed R on your computer, you can jump to step two.
+Step 1: Install R and RstudioThe latest version of R can be download from CRAN.</description>
+    </item>
+    
+  </channel>
+</rss>

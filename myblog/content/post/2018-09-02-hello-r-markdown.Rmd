@@ -1,0 +1,20 @@
+---
+title: Hello, R Markdown
+author: Xiaojun Sun
+date: '2018-09-02'
+slug: hello-r-markdown
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r}
+x <- LETTERS[1:5]
+print(x)
+plot(rnorm(10))
+```
+
+Inset a logo:
+
+![](/post/2018-09-02-hello-r-markdown_files/rlogo.jpg)
