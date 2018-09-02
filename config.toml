@@ -1,6 +1,6 @@
-baseurl = "xiaojunsun.netlify.com/"
+baseurl = "/"
 languageCode = "en-us"
-title = "A Hugo website"
+title = "Xiaojun's Blog"
 theme = "hugo-lithium"
 googleAnalytics = ""
 disqusShortname = ""
@@ -13,18 +13,23 @@ enableEmoji = true
 [[menu.main]]
     name = "Home"
     url = "/"
+    weight = 1
 [[menu.main]]
     name = "About"
     url = "/about/"
+    weight = 2
 [[menu.main]]
     name = "Categories"
     url = "/categories/"
+    weight = 3
 [[menu.main]]
     name = "Tags"
     url = "/tags/"
+    weight = 4
 [[menu.main]]
     name = "GitHub"
     url = "https://github.com/XiaojunSun"
+    weight = 5
     
 [params]
     description = "A personal blog built through Hugo and blogdown."
@@ -39,7 +44,7 @@ enableEmoji = true
     MathJaxVersion = "2.7.1"
 
     [params.logo]
-    url = "logo.png"
+    url = "logo.jpg"
     width = 50
     height = 50
     alt = "Logo"
