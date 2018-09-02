@@ -3,5 +3,6 @@
 .RData
 .Ruserdata
 blogdown
+.Rproj
 Thumbs.db # https://alison.rbind.io/post/up-and-running-with-blogdown/
 public/ # if using Netlify
