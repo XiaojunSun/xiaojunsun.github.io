@@ -17,4 +17,3 @@ plot(rnorm(10))
 
 Inset a logo:
 
-![](/post/2018-09-02-hello-r-markdown_files/rlogo.jpg)

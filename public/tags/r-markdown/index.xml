@@ -17,8 +17,7 @@
       <pubDate>Sun, 02 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/xiaojunsun.netlify.com/2018/09/02/hello-r-markdown/</guid>
-      <description>x &amp;lt;- LETTERS[1:5]print(x)## [1] &amp;quot;A&amp;quot; &amp;quot;B&amp;quot; &amp;quot;C&amp;quot; &amp;quot;D&amp;quot; &amp;quot;E&amp;quot;plot(rnorm(10))Inset a logo:
-</description>
+      <description>x &amp;lt;- LETTERS[1:5]print(x)## [1] &amp;quot;A&amp;quot; &amp;quot;B&amp;quot; &amp;quot;C&amp;quot; &amp;quot;D&amp;quot; &amp;quot;E&amp;quot;plot(rnorm(10))Inset a logo:</description>
     </item>
     
     <item>
