@@ -7,6 +7,7 @@ disqusShortname = ""
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 enableEmoji = true
 relativeURLs = true
+hasCJKLanguage = true
 
 [permalinks]
     post = "/:year/:month/:day/:slug/"
@@ -33,8 +34,12 @@ relativeURLs = true
     weight = 5
     
 [params]
+    author = "Xiaojun Sun"
+    dateFormat = "2006/01/02"
     description = "A personal blog built through Hugo and blogdown."
+    footer = "&copy; [XiaojunSun](https://github.com/xiaojunsun) 2018 | Powered by the [Hugo](https://gohugo.io/) and [blogdown](https://github.com/rstudio/blogdown)"
 
+    
     # options for highlight.js (version, additional languages, and theme)
     highlightjsVersion = "9.11.0"
     highlightjsCDN = "//cdn.bootcss.com"
@@ -49,4 +54,3 @@ relativeURLs = true
     width = 50
     height = 50
     alt = "Logo"
-
