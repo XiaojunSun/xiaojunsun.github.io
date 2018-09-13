@@ -26,6 +26,11 @@ a {
   outline: none;
 }
 
+blockquote{
+  font-style: italic;
+  font-size: 90%;
+}
+
 code {
   background-color: #FCFCFC;
   font-family: consolas, courier, monospace
@@ -206,6 +211,29 @@ code {
   border-bottom-color: #222;
 }
 
+.figure{
+  display: block;
+  height: auto;
+  width: auto;
+  text-align: center;
+}
+
+.figure img{
+  max-width: 100%;
+  display: inline-block;
+}
+
+.caption{
+  text-align: center;
+  font-size: 80%;
+}
+
+.footnotes{
+  font-size: 16px;
+  line-height: 1.5;
+  color: #676565;
+}
+
 .footer {
   padding: 25px 0;
   text-align: center;
@@ -280,7 +308,7 @@ code {
   }
 
   .archive-title {
-    font-size: 38px;
+    font-size: 35px;
   }
 
   .archive-item-date {
@@ -297,7 +325,7 @@ code {
   }
 
   .article-title {
-    font-size: 42px;
+    font-size: 40px;
   }
 
   .article-duration {
