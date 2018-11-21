@@ -4,9 +4,9 @@ author: Xiaojun Sun
 date: '2014-10-12'
 slug: mode-type-and-class-of-r-objects
 categories:
-  - R
+  - Notes
 tags:
-  - tutorial
+  - R
 ---
 
 In the R training class, some students are confused about the `mode`, `type` and `class` in R language definition. So I write this post to clarify this question.

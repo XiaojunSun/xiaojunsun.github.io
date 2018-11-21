@@ -4,9 +4,9 @@ author: Xiaojun Sun
 date: '2014-06-20'
 slug: install-and-update-r-on-windows
 categories:
-  - R
+  - Tutorial
 tags:
-  - tutorial
+  - R
 ---
 
 R is a language and environment for statistical computing and graphics. It is widely used around the world. Here I briefly describe the steps to install and upgrade R for R beginners. This post is written for Windows user. If you use Mac, please search Google for instruction. If you have already installed R on your computer, you can jump to step two.
@@ -15,7 +15,7 @@ R is a language and environment for statistical computing and graphics. It is wi
 
 The latest version of R can be download from [CRAN][2]. Rstudio Desktop can be download from it's [official site][3]. 
 
-![Rstudio](http://i.imgbox.com/IHpsi4Gn.png "Download Rstudio")
+![Rstudio](http://i.imgbox.com/IHpsi4Gn.png )
 
 ### Install R
 
@@ -35,11 +35,11 @@ If you install it successfully, you open R and will see this:
 
 Choose directory to install Rstudio.
 
-![installRstudion1](http://i.imgbox.com/exN40Tst.jpg "Choose directory to install Rstudio")
+![installRstudion1](http://i.imgbox.com/exN40Tst.jpg)
 
 Open Rstudio you will see this.
 
-![installRstudion2](http://i.imgbox.com/W5BWO12s.jpg "Rstudio Interface")
+![installRstudion2](http://i.imgbox.com/W5BWO12s.jpg)
 
 
 ## Step 2: Upgrade R
@@ -58,7 +58,7 @@ Old.R.RunMe()
 ```
 
 
-![oldr](http://i.imgbox.com/yn5SmnIH.jpg "Set global lib")
+![oldr](http://i.imgbox.com/yn5SmnIH.jpg)
 
 It will ask you whether or not to quit R. Just type `n` and hit `ENTER`. Then run `New.R.RunMe()` just the same way.
 

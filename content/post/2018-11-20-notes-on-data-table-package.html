@@ -1,0 +1,585 @@
+---
+title: "Notes on data.table Package"
+author: "Xiaojun Sun"
+date: '2018-11-20'
+slug: notes-on-data-table
+tags: 
+- Packages
+- R
+categories:
+- Tutorial
+- Notes
+---
+
+
+
+<div id="general-form" class="section level2">
+<h2>General form</h2>
+<p>The <a href="https://github.com/Rdatatable/data.table/wiki">data.table</a> package is designed to take a general form: <strong>DT[i, j, by]</strong>, which means given DT, subset/reorder rows using <em>i</em>, then calculate <em>j</em> grouped by <em>by</em>.</p>
+</div>
+<div id="create-a-data.table-and-call-it-dt." class="section level2">
+<h2>Create a data.table and call it DT.</h2>
+<p>In this section we investigate most features of <em>data.table</em> by an example within the framework of the general form.</p>
+<pre class="r"><code>set.seed(2018L)
+DT = data.table(V1 = c(1L, 2L), 
+                V2 = LETTERS[1:3], 
+                V3 = round(rnorm(12),3), 
+                V4 = 1:12)</code></pre>
+<pre class="r"><code>head(DT)</code></pre>
+<pre><code>##    V1 V2     V3 V4
+## 1:  1  A -0.423  1
+## 2:  2  B -1.550  2
+## 3:  1  C -0.064  3
+## 4:  2  A  0.271  4
+## 5:  1  B  1.735  5
+## 6:  2  C -0.265  6</code></pre>
+<p>You can also convert existing objects to a data.table using <code>setDT()</code> (for data.frames and lists) and <code>as.data.table()</code> (for other structures).</p>
+</div>
+<div id="subsetting-rows-using-i" class="section level2">
+<h2>Subsetting rows using <em>i</em></h2>
+<pre class="r"><code>DT[3:5] #or DT[3:5,]</code></pre>
+<pre><code>##    V1 V2     V3 V4
+## 1:  1  C -0.064  3
+## 2:  2  A  0.271  4
+## 3:  1  B  1.735  5</code></pre>
+<pre class="r"><code>DT[V2==&quot;A&quot;]</code></pre>
+<pre><code>##    V1 V2     V3 V4
+## 1:  1  A -0.423  1
+## 2:  2  A  0.271  4
+## 3:  1  A  2.099  7
+## 4:  2  A  0.637 10</code></pre>
+<pre class="r"><code>DT[V2 %in% c(&quot;A&quot;,&quot;C&quot;)]</code></pre>
+<pre><code>##    V1 V2     V3 V4
+## 1:  1  A -0.423  1
+## 2:  1  C -0.064  3
+## 3:  2  A  0.271  4
+## 4:  2  C -0.265  6
+## 5:  1  A  2.099  7
+## 6:  1  C -0.611  9
+## 7:  2  A  0.637 10
+## 8:  2  C -1.030 12</code></pre>
+<p>We can sort the colums in data.table using <code>order()</code>.</p>
+<pre class="r"><code>ans &lt;- DT[order(-V1, V3)]
+head(ans)</code></pre>
+<pre><code>##    V1 V2     V3 V4
+## 1:  2  B -1.550  2
+## 2:  2  C -1.030 12
+## 3:  2  C -0.265  6
+## 4:  2  A  0.271  4
+## 5:  2  A  0.637 10
+## 6:  2  B  0.863  8</code></pre>
+</div>
+<div id="subsetting-columns-in-j" class="section level2">
+<h2>Subsetting columns in <em>j</em></h2>
+<p>Wrap the variables (column names) within list() or .() to ensure that a data.table is returned.</p>
+<pre class="r"><code>DT[,V2] #return a vector, but D[,.(V2)] return a data.table</code></pre>
+<pre><code>##  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot;</code></pre>
+<pre class="r"><code>DT[,.(V2, V3)] #return a data.table</code></pre>
+<pre><code>##     V2     V3
+##  1:  A -0.423
+##  2:  B -1.550
+##  3:  C -0.064
+##  4:  A  0.271
+##  5:  B  1.735
+##  6:  C -0.265
+##  7:  A  2.099
+##  8:  B  0.863
+##  9:  C -0.611
+## 10:  A  0.637
+## 11:  B -0.643
+## 12:  C -1.030</code></pre>
+<p>We can refer to columns by names in j (like in a data.frame)</p>
+<pre class="r"><code>DT[,&quot;V2&quot;] #return a data.table
+DT[,c(&quot;V2&quot;, &quot;V3&quot;)]</code></pre>
+<p>We can also select columns named in a variable using the <code>..</code> prefix.</p>
+<pre class="r"><code>select_cols = c(&quot;V2&quot;, &quot;V3&quot;)
+ans = DT[,..select_cols]
+head(ans)</code></pre>
+<pre><code>##    V2     V3
+## 1:  A -0.423
+## 2:  B -1.550
+## 3:  C -0.064
+## 4:  A  0.271
+## 5:  B  1.735
+## 6:  C -0.265</code></pre>
+<p>We can also deselect columns using - or !. For example:</p>
+<pre class="r"><code>ans = DT[, -c(&quot;V2&quot;, &quot;V3&quot;)]
+head(ans)</code></pre>
+<pre><code>##    V1 V4
+## 1:  1  1
+## 2:  2  2
+## 3:  1  3
+## 4:  2  4
+## 5:  1  5
+## 6:  2  6</code></pre>
+<p>We can also select by specifying start and end column names.</p>
+<pre class="r"><code>ans = DT[, V1:V2]
+head(ans)</code></pre>
+<pre><code>##    V1 V2
+## 1:  1  A
+## 2:  2  B
+## 3:  1  C
+## 4:  2  A
+## 5:  1  B
+## 6:  2  C</code></pre>
+</div>
+<div id="manipulating-on-columns-in-j" class="section level2">
+<h2>Manipulating on columns in <em>j</em></h2>
+<p><code>data.table</code>’s <code>j</code> can handle more than just selecting columns - it can handle expressions, i.e., computing on columns. This shouldn’t be surprising, as columns can be referred to as if they are variables. Then we should be able to compute by calling functions on those variables.</p>
+<pre class="r"><code>DT[,sum(V1)]</code></pre>
+<pre><code>## [1] 18</code></pre>
+<pre class="r"><code>DT[,.(sum(V1), sd(V3))]</code></pre>
+<pre><code>##    V1       V2
+## 1: 18 1.089491</code></pre>
+<pre class="r"><code>DT[,.(aggre = sum(V1), V3_sd = sd(V3))]</code></pre>
+<pre><code>##    aggre    V3_sd
+## 1:    18 1.089491</code></pre>
+<pre class="r"><code>DT[,.(V1[1:3], V3_sd = sd(V3))] #Columns are recycled if different length. </code></pre>
+<pre><code>##    V1    V3_sd
+## 1:  1 1.089491
+## 2:  2 1.089491
+## 3:  1 1.089491</code></pre>
+<pre class="r"><code>DT[, {print(V2)
+  plot(V3)}]</code></pre>
+<pre><code>##  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot;</code></pre>
+<p><img src="/post/2018-11-20-notes-on-data-table-package_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre><code>## NULL</code></pre>
+</div>
+<div id="doing-j-by-group" class="section level2">
+<h2>Doing <em>j</em> by group</h2>
+<pre class="r"><code>DT[,.(V4_Sum = sum(V4)), by=V1]</code></pre>
+<pre><code>##    V1 V4_Sum
+## 1:  1     36
+## 2:  2     42</code></pre>
+<pre class="r"><code>DT[,.(V4_Sum = sum(V4)), by=.(V1, V2)]</code></pre>
+<pre><code>##    V1 V2 V4_Sum
+## 1:  1  A      8
+## 2:  2  B     10
+## 3:  1  C     12
+## 4:  2  A     14
+## 5:  1  B     16
+## 6:  2  C     18</code></pre>
+<pre class="r"><code>DT[,.(V4_sum = sum(V4)), by=sign(V1-1)]</code></pre>
+<pre><code>##    sign V4_sum
+## 1:    0     36
+## 2:    1     42</code></pre>
+<pre class="r"><code>DT[,.(V4_sum = sum(V4)), by=.(V1_01=sign(V1-1))]</code></pre>
+<pre><code>##    V1_01 V4_sum
+## 1:     0     36
+## 2:     1     42</code></pre>
+<pre class="r"><code>DT[1:5,.(V4_Sum = sum(V4)), by=V1]</code></pre>
+<pre><code>##    V1 V4_Sum
+## 1:  1      9
+## 2:  2      6</code></pre>
+<p>data.table retaining the original order of groups by default. Sometimes we may want to directly order by all the grouping variables.</p>
+<pre class="r"><code>DT[,.(V4_Sum = sum(V4)), keyby=.(V1, V2)]</code></pre>
+<pre><code>##    V1 V2 V4_Sum
+## 1:  1  A      8
+## 2:  1  B     16
+## 3:  1  C     12
+## 4:  2  A     14
+## 5:  2  B     10
+## 6:  2  C     18</code></pre>
+</div>
+<div id="addingupdating-columns-by-reference-in-j-using" class="section level2">
+<h2>Adding/Updating columns by reference in <em>j</em> using :=</h2>
+<p><em>Watch out: extra assignment (DT &lt;- DT[…]) is redundant.</em></p>
+<pre class="r"><code>ans &lt;- DT[, V1:=round(exp(V1),2)]
+head(ans)</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1
+## 2: 7.39  B -1.550  2
+## 3: 2.72  C -0.064  3
+## 4: 7.39  A  0.271  4
+## 5: 2.72  B  1.735  5
+## 6: 7.39  C -0.265  6</code></pre>
+<pre class="r"><code>DT[, c(&quot;V5&quot;, &quot;V6&quot;):=list(round(exp(V1),2), LETTERS[4:6])]
+# DT now contains the two newly added columns.
+# This is what called &quot;added by reference&quot;.
+# rewrite above line using functional :=; [] prints the result to screen
+DT[, &#39;:=&#39;(V5=round(exp(V1), 2),
+          V6=LETTERS[4:6])][]</code></pre>
+<p>We can delete columns by reference too.</p>
+<pre class="r"><code>DT[, V1:=NULL] #remove column V1.
+DT[, c(&quot;V1&quot;, &quot;V2&quot;):= NULL]
+colchosen = c(&quot;V1&quot;, &quot;V2&quot;)
+DT[, (colchosen):= NULL]</code></pre>
+</div>
+<div id="indexing-and-keys" class="section level2">
+<h2>Indexing and keys</h2>
+<p>We can think of a key as supercharged rownames.</p>
+<ol style="list-style-type: decimal">
+<li>We can set key on multiple columns and the column can be of different types – integer, numeric, character, factor, integer64 etc. list and complex types are not supported yet.</li>
+<li>Uniqueness is not enforced, i.e., duplicate key values are allowed. Since rows are sorted by key, any duplicates in the key columns will appear consecutively.</li>
+<li>Setting a key does two things:
+<ul>
+<li>physically reorders the rows of the data.table by the column(s) provided by reference, always in increasing order.</li>
+<li>marks those columns as key columns by setting an attribute called <code>sorted</code> to the data.table.</li>
+</ul></li>
+<li>Since the rows are reordered, a data.table can have at most one key because it can not be sorted in more than one way.</li>
+</ol>
+<pre class="r"><code>setkey(DT, V2) #A key is set on column V2. 
+head(DT)</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1
+## 2: 7.39  A  0.271  4
+## 3: 2.72  A  2.099  7
+## 4: 7.39  A  0.637 10
+## 5: 7.39  B -1.550  2
+## 6: 2.72  B  1.735  5</code></pre>
+<pre class="r"><code>DT[&quot;A&quot;] #all rows that match the value A in the key column</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1
+## 2: 7.39  A  0.271  4
+## 3: 2.72  A  2.099  7
+## 4: 7.39  A  0.637 10</code></pre>
+<pre class="r"><code>DT[c(&quot;A&quot;, &quot;C&quot;)]</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1
+## 2: 7.39  A  0.271  4
+## 3: 2.72  A  2.099  7
+## 4: 7.39  A  0.637 10
+## 5: 2.72  C -0.064  3
+## 6: 7.39  C -0.265  6
+## 7: 2.72  C -0.611  9
+## 8: 7.39  C -1.030 12</code></pre>
+<p>We can choose, for each query, if “all” the matching rows should be returned, or just the “first” or “last” using the <code>mult</code> argument. The default value is “all” - what we’ve seen so far.</p>
+<pre class="r"><code>DT[&quot;A&quot;, mult=&quot;first&quot;]</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1</code></pre>
+<pre class="r"><code>DT[c(&quot;A&quot;,&quot;D&quot;), nomatch = 0]</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1
+## 2: 7.39  A  0.271  4
+## 3: 2.72  A  2.099  7
+## 4: 7.39  A  0.637 10</code></pre>
+<pre class="r"><code>DT[c(&quot;A&quot;,&quot;C&quot;), sum(V4)]</code></pre>
+<pre><code>## [1] 52</code></pre>
+<pre class="r"><code>#by=.EACHI allows to group by each subset of known groups in i.
+DT[c(&quot;A&quot;,&quot;C&quot;), sum(V4), by=.EACHI]</code></pre>
+<pre><code>##    V2 V1
+## 1:  A 22
+## 2:  C 30</code></pre>
+<pre class="r"><code>setkey(DT,V1,V2)
+DT[.(2,&quot;C&quot;)] #rows can be selected on 2 keys which is an equijoin.  </code></pre>
+<pre><code>##    V1 V2 V3 V4
+## 1:  2  C NA NA</code></pre>
+<pre class="r"><code>DT[.(2, c(&quot;A&quot;,&quot;C&quot;))]</code></pre>
+<pre><code>##    V1 V2 V3 V4
+## 1:  2  A NA NA
+## 2:  2  C NA NA</code></pre>
+<p>Alternatively you can pass a character vector of column names to the function <code>setkeyv()</code>. This is particularly useful while designing functions to pass columns to set key on as function arguments.</p>
+<pre class="r"><code>setkeyv(DT, &quot;V2&quot;)</code></pre>
+<p>When we set key to a data.table, the data.table will be reordered (or sorted) by the columns we provided. Since the data is sorted, we don’t have to scan through the entire length of the column! We can instead use binary search to search a value in O(log n) as opposed to O(n) in case of vector scan approach, where n is the number of rows in the data.table. This is why binary search based subsets are incredibly fast.</p>
+<p>In data.table, the <code>:=</code> operator and all the <code>set*</code> (e.g., setkey, setorder, setnames etc..) functions are the only ones which modify the input object by reference.</p>
+</div>
+<div id="secondary-indices" class="section level2">
+<h2>Secondary indices</h2>
+<p>Secondary indices are similar to keys in data.table, except for two major differences:</p>
+<ul>
+<li>It doesn’t physically reorder the entire data.table in RAM. Instead, it only computes the order for the set of columns provided and stores that order vector in an additional attribute called index.</li>
+<li>There can be more than one secondary index for a data.table (as we will see below).</li>
+</ul>
+<pre class="r"><code>setindex(DT, V1)
+indices(DT)</code></pre>
+<pre><code>## [1] &quot;V1&quot;</code></pre>
+<pre class="r"><code>setindex(DT, V1, V2)
+indices(DT) #we can have multiple secondary indices.</code></pre>
+<pre><code>## [1] &quot;V1&quot;     &quot;V1__V2&quot;</code></pre>
+<pre class="r"><code>names(attributes(DT))</code></pre>
+<pre><code>## [1] &quot;names&quot;             &quot;row.names&quot;         &quot;class&quot;            
+## [4] &quot;.internal.selfref&quot; &quot;sorted&quot;            &quot;index&quot;</code></pre>
+<p><code>setindex(DT, NULL)</code> would remove all secondary indices.</p>
+<p>Why do we need secondary indices?</p>
+<ul>
+<li>Reordering a data.table can be expensive and not always ideal
+<ul>
+<li><code>setkey()</code> requires: computing the order vector for the column(s) provided, and reordering the entire data.table by reference, based on the order vector computed. However reordering the data.table could be time consuming.</li>
+</ul></li>
+<li>There can be only one key at the most</li>
+<li>Secondary indices can be reused
+<ul>
+<li>Creating an index is as simple as storing the order vector as an attribute</li>
+</ul></li>
+<li>The new <code>on</code> argument allows for cleaner syntax and automatic creation and reuse of secondary indices</li>
+</ul>
+<p><code>on</code> argument:</p>
+<ul>
+<li>enables subsetting by computing secondary indices on the fly. This eliminates having to do <code>setindex()</code> every time.</li>
+<li>allows easy reuse of existing indices by just checking the attributes.</li>
+<li>allows for a cleaner syntax by having the columns on which the subset is performed as part of the syntax. This makes the code easier to follow.</li>
+</ul>
+<p><em>Note: <code>on</code> argument can also be used on keyed subsets as well. In fact, we encourage to provide the on argument even when subsetting using keys for better readability.</em></p>
+<pre class="r"><code>setindex(DT, NULL)
+DT[&quot;A&quot;, on = &quot;V2&quot;]</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1
+## 2: 2.72  A  2.099  7
+## 3: 7.39  A  0.271  4
+## 4: 7.39  A  0.637 10</code></pre>
+<pre class="r"><code>DT[.(&quot;A&quot;, 1), on = c(&quot;V2&quot;, &quot;V4&quot;)]</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  A -0.423  1</code></pre>
+<pre class="r"><code>DT[.(&quot;A&quot;, 1), mean(V3), on = c(&quot;V2&quot;, &quot;V4&quot;)]</code></pre>
+<pre><code>## [1] -0.423</code></pre>
+<pre class="r"><code># replace A with D, using `on` instead of setting keys.
+DT[.(&quot;A&quot;), V2:=&quot;D&quot;, on = &quot;V2&quot;]
+head(DT)</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 2.72  D -0.423  1
+## 2: 2.72  D  2.099  7
+## 3: 2.72  B  1.735  5
+## 4: 2.72  B -0.643 11
+## 5: 2.72  C -0.064  3
+## 6: 2.72  C -0.611  9</code></pre>
+</div>
+<div id="auto-indexing" class="section level2">
+<h2>Auto indexing</h2>
+<p>At the moment, auto indexing is only implemented for binary operators <code>==</code> and <code>%in%</code>. An index is automatically created and saved as an attribute, it is used to perform the subset.</p>
+<pre class="r"><code>set.seed(1L)
+dt = data.table(x = sample(1e5L, 1e7L, TRUE), y = runif(100L))
+print(object.size(dt), units = &quot;Mb&quot;)</code></pre>
+<pre><code>## 114.4 Mb</code></pre>
+<pre class="r"><code>system.time(ans &lt;- dt[x == 989L])</code></pre>
+<pre><code>## 用户 系统 流逝 
+## 0.25 0.03 0.29</code></pre>
+<pre class="r"><code>system.time(ans &lt;- dt[x == 989L])</code></pre>
+<pre><code>## 用户 系统 流逝 
+##    0    0    0</code></pre>
+</div>
+<div id="advanced-data.table-operations" class="section level2">
+<h2>Advanced data.table operations</h2>
+<p><code>.N</code> is a special built-in variable that holds the number of observations in the current group, usable in i and j.</p>
+<pre class="r"><code>DT[.N-1]</code></pre>
+<pre><code>##      V1 V2     V3 V4
+## 1: 7.39  C -0.265  6</code></pre>
+<pre class="r"><code>DT[,.N]</code></pre>
+<pre><code>## [1] 12</code></pre>
+<p><code>.()</code> is an alias to <code>list()</code> and means the same. The <code>.()</code> notation is not needed when there is only one item in by or j. eg. <code>DT[,.(V2,V3)]</code>, <code>DT[, mean(V3), by=.(V1,V2)]</code></p>
+<p><code>.SD</code> stands for Subset of Data. <code>.SD</code> is a data.table and holds the data for the current group defined using by. <code>.SD</code> contains all the columns except the grouping columns by default. It reduces programming time but keeps readability. .SD is only accessible in j.</p>
+<pre class="r"><code>DT[,.SD[c(1,.N)], by=V2]</code></pre>
+<pre><code>##    V2   V1     V3 V4
+## 1:  D 2.72 -0.423  1
+## 2:  D 7.39  0.637 10
+## 3:  B 2.72  1.735  5
+## 4:  B 7.39  0.863  8
+## 5:  C 2.72 -0.064  3
+## 6:  C 7.39 -1.030 12</code></pre>
+<pre class="r"><code>DT[, lapply(.SD, sum), by=V2]</code></pre>
+<pre><code>##    V2    V1     V3 V4
+## 1:  D 20.22  2.584 22
+## 2:  B 20.22  0.405 26
+## 3:  C 20.22 -1.970 30</code></pre>
+<p><code>.SDcols</code> is used together with <code>.SD</code>, to specify a subset of the columns of .SD to be used in j.</p>
+<pre class="r"><code>DT[, lapply(.SD, sum), by=V2, 
+.SDcols = c(&quot;V3&quot;,&quot;V4&quot;)]</code></pre>
+<pre><code>##    V2     V3 V4
+## 1:  D  2.584 22
+## 2:  B  0.405 26
+## 3:  C -1.970 30</code></pre>
+<p>How can we concatenate columns V3 and V4 for each group in V2?</p>
+<pre class="r"><code>ans &lt;- DT[, .(val = c(V3, V4)), by = V2]
+head(ans)</code></pre>
+<pre><code>##    V2    val
+## 1:  D -0.423
+## 2:  D  2.099
+## 3:  D  0.271
+## 4:  D  0.637
+## 5:  D  1.000
+## 6:  D  7.000</code></pre>
+</div>
+<div id="chain-expressions-together" class="section level2">
+<h2>Chain expressions together</h2>
+<pre class="r"><code>DT&lt;-DT[, .(V4.Sum = sum(V4)),by=V1] 
+DT[V4.Sum &gt; 40] #no chaining </code></pre>
+<pre><code>##      V1 V4.Sum
+## 1: 7.39     42</code></pre>
+<p>This statements can be rewritten in this way.</p>
+<pre class="r"><code>DT[, .(V4.Sum = sum(V4)), by=V1][V4.Sum &gt; 40 ] </code></pre>
+</div>
+<div id="efficient-reshaping-using-data.table" class="section level2">
+<h2>Efficient reshaping using data.table</h2>
+<p>The <code>melt</code> and <code>dcast</code> functions for data.tables are much faster version of the corresponding functions in the <code>reshape2</code> package. It is not necessary to load <code>reshape2</code> any more.</p>
+<pre class="r"><code>s1 &lt;- &quot;family_id age_mother dob_child1 dob_child2 dob_child3
+1         30 1998-11-26 2000-01-29         NA
+2         27 1996-06-22         NA         NA
+3         26 2002-07-11 2004-04-05 2007-09-02
+4         32 2004-10-10 2009-08-27 2012-07-21
+5         29 2000-12-05 2005-02-28         NA&quot;
+# dob stands for date of birth.
+DT &lt;- fread(s1)
+DT</code></pre>
+<pre><code>##    family_id age_mother dob_child1 dob_child2 dob_child3
+## 1:         1         30 1998-11-26 2000-01-29       &lt;NA&gt;
+## 2:         2         27 1996-06-22       &lt;NA&gt;       &lt;NA&gt;
+## 3:         3         26 2002-07-11 2004-04-05 2007-09-02
+## 4:         4         32 2004-10-10 2009-08-27 2012-07-21
+## 5:         5         29 2000-12-05 2005-02-28       &lt;NA&gt;</code></pre>
+<p>Convert DT to long form where each dob is a separate observation.</p>
+<pre class="r"><code>DT.m1 = melt(DT, id.vars = c(&quot;family_id&quot;, &quot;age_mother&quot;),
+             measure.vars = c(&quot;dob_child1&quot;, &quot;dob_child2&quot;, &quot;dob_child3&quot;))
+head(DT.m1)</code></pre>
+<pre><code>##    family_id age_mother   variable      value
+## 1:         1         30 dob_child1 1998-11-26
+## 2:         2         27 dob_child1 1996-06-22
+## 3:         3         26 dob_child1 2002-07-11
+## 4:         4         32 dob_child1 2004-10-10
+## 5:         5         29 dob_child1 2000-12-05
+## 6:         1         30 dob_child2 2000-01-29</code></pre>
+<ul>
+<li><code>measure.vars</code> specify the set of columns we would like to collapse (or combine) together. We can also specify column indices instead of names.</li>
+<li>By default, variable column is of type <code>factor</code>. Set <code>variable.factor</code> argument to FALSE if you’d like to return a character vector instead. <code>variable.factor</code> argument is only available in <code>melt</code> from <code>data.table</code> and not in the <code>reshape2</code> package.</li>
+<li>By default, the molten columns are automatically named <code>variable</code> and <code>value</code>. <code>melt</code> preserves column attributes in result.</li>
+<li>By default, when one of <code>id.vars</code> or <code>measure.vars</code> is missing, the rest of the columns are automatically assigned to the missing argument.</li>
+</ul>
+<pre class="r"><code>DT.m1 = melt(DT, measure.vars = c(&quot;dob_child1&quot;, &quot;dob_child2&quot;, &quot;dob_child3&quot;), 
+             variable.name = &quot;child&quot;, value.name = &quot;dob&quot;)
+head(DT.m1)</code></pre>
+<pre><code>##    family_id age_mother      child        dob
+## 1:         1         30 dob_child1 1998-11-26
+## 2:         2         27 dob_child1 1996-06-22
+## 3:         3         26 dob_child1 2002-07-11
+## 4:         4         32 dob_child1 2004-10-10
+## 5:         5         29 dob_child1 2000-12-05
+## 6:         1         30 dob_child2 2000-01-29</code></pre>
+<p>How can we get back to the original data table DT from DT.m?</p>
+<pre class="r"><code>dcast(DT.m1, family_id + age_mother ~ child, value.var = &quot;dob&quot;)</code></pre>
+<pre><code>##    family_id age_mother dob_child1 dob_child2 dob_child3
+## 1:         1         30 1998-11-26 2000-01-29       &lt;NA&gt;
+## 2:         2         27 1996-06-22       &lt;NA&gt;       &lt;NA&gt;
+## 3:         3         26 2002-07-11 2004-04-05 2007-09-02
+## 4:         4         32 2004-10-10 2009-08-27 2012-07-21
+## 5:         5         29 2000-12-05 2005-02-28       &lt;NA&gt;</code></pre>
+<div id="enhanced-melt" class="section level3">
+<h3>Enhanced <code>melt</code></h3>
+<pre class="r"><code>s2 &lt;- &quot;family_id age_mother dob_child1 dob_child2 dob_child3 gender_child1 gender_child2 gender_child3
+1         30 1998-11-26 2000-01-29         NA             1             2            NA
+2         27 1996-06-22         NA         NA             2            NA            NA
+3         26 2002-07-11 2004-04-05 2007-09-02             2             2             1
+4         32 2004-10-10 2009-08-27 2012-07-21             1             1             1
+5         29 2000-12-05 2005-02-28         NA             2             1            NA&quot;
+DT &lt;- fread(s2)
+DT</code></pre>
+<pre><code>##    family_id age_mother dob_child1 dob_child2 dob_child3 gender_child1
+## 1:         1         30 1998-11-26 2000-01-29       &lt;NA&gt;             1
+## 2:         2         27 1996-06-22       &lt;NA&gt;       &lt;NA&gt;             2
+## 3:         3         26 2002-07-11 2004-04-05 2007-09-02             2
+## 4:         4         32 2004-10-10 2009-08-27 2012-07-21             1
+## 5:         5         29 2000-12-05 2005-02-28       &lt;NA&gt;             2
+##    gender_child2 gender_child3
+## 1:             2            NA
+## 2:            NA            NA
+## 3:             2             1
+## 4:             1             1
+## 5:             1            NA</code></pre>
+<pre class="r"><code>colA &lt;- paste(&quot;dob_child&quot;, 1:3, sep = &quot;&quot;)
+colB &lt;- paste(&quot;gender_child&quot;, 1:3, sep = &quot;&quot;)
+DT.m2 &lt;- melt(DT, measure.vars  = list(colA, colB), value.name = c(&quot;dob&quot;, &quot;gender&quot;))
+head(DT.m2)</code></pre>
+<pre><code>##    family_id age_mother variable        dob gender
+## 1:         1         30        1 1998-11-26      1
+## 2:         2         27        1 1996-06-22      2
+## 3:         3         26        1 2002-07-11      2
+## 4:         4         32        1 2004-10-10      1
+## 5:         5         29        1 2000-12-05      2
+## 6:         1         30        2 2000-01-29      2</code></pre>
+<p>We can use the function <code>patterns()</code>, implemented for convenience, to provide regular expressions for the columns to be combined together. The above operation can be rewritten as:</p>
+<pre class="r"><code>DT.m2 &lt;- melt(DT, measure = patterns(&quot;^dob&quot;, &quot;^gender&quot;), value.name = c(&quot;dob&quot;, &quot;gender&quot;))
+head(DT.m2)</code></pre>
+<pre><code>##    family_id age_mother variable        dob gender
+## 1:         1         30        1 1998-11-26      1
+## 2:         2         27        1 1996-06-22      2
+## 3:         3         26        1 2002-07-11      2
+## 4:         4         32        1 2004-10-10      1
+## 5:         5         29        1 2000-12-05      2
+## 6:         1         30        2 2000-01-29      2</code></pre>
+</div>
+<div id="enhanced-dcast" class="section level3">
+<h3>Enhanced <code>dcast</code></h3>
+<p>We can now provide multiple <code>value.var</code> columns to <code>dcast</code> for data.tables directly.</p>
+<pre class="r"><code>DT.c2 = dcast(DT.m2, family_id + age_mother ~ variable, value.var = c(&quot;dob&quot;, &quot;gender&quot;))
+DT.c2</code></pre>
+<pre><code>##    family_id age_mother      dob_1      dob_2      dob_3 gender_1 gender_2
+## 1:         1         30 1998-11-26 2000-01-29       &lt;NA&gt;        1        2
+## 2:         2         27 1996-06-22       &lt;NA&gt;       &lt;NA&gt;        2       NA
+## 3:         3         26 2002-07-11 2004-04-05 2007-09-02        2        2
+## 4:         4         32 2004-10-10 2009-08-27 2012-07-21        1        1
+## 5:         5         29 2000-12-05 2005-02-28       &lt;NA&gt;        2        1
+##    gender_3
+## 1:       NA
+## 2:       NA
+## 3:        1
+## 4:        1
+## 5:       NA</code></pre>
+<p>We can provide multiple functions to <code>fun.aggregate</code> and multiple <code>value.var</code> columns to dcast for data.tables simultaneously.</p>
+<pre class="r"><code>set.seed(45L)
+DT = data.table(x=sample(5,20,TRUE), y=sample(2,20,TRUE),
+                z=sample(letters[1:2], 20,TRUE), 
+                d1 = runif(20), d2=1L)
+dcast(DT, x + y ~ z, fun=mean, value.var=&quot;d1&quot;)</code></pre>
+<pre><code>##    x y         a         b
+## 1: 1 1 0.8270330       NaN
+## 2: 1 2 0.2298821       NaN
+## 3: 2 1 0.6075802 0.4801956
+## 4: 2 2 0.3935541 0.1246861
+## 5: 3 1       NaN 0.3441735
+## 6: 3 2 0.9381460 0.9478201
+## 7: 4 1 0.5633317       NaN
+## 8: 5 1       NaN 0.7755347
+## 9: 5 2       NaN 0.9685640</code></pre>
+<pre class="r"><code># multiple fun.aggregate
+dcast(DT, x + y ~ z, fun=list(sum, mean), value.var=&quot;d1&quot;)</code></pre>
+<pre><code>##    x y  d1_sum_a  d1_sum_b d1_mean_a d1_mean_b
+## 1: 1 1 1.6540660 0.0000000 0.8270330       NaN
+## 2: 1 2 0.2298821 0.0000000 0.2298821       NaN
+## 3: 2 1 1.8227407 0.9603913 0.6075802 0.4801956
+## 4: 2 2 0.7871082 0.2493722 0.3935541 0.1246861
+## 5: 3 1 0.0000000 0.6883470       NaN 0.3441735
+## 6: 3 2 0.9381460 1.8956403 0.9381460 0.9478201
+## 7: 4 1 0.5633317 0.0000000 0.5633317       NaN
+## 8: 5 1 0.0000000 0.7755347       NaN 0.7755347
+## 9: 5 2 0.0000000 0.9685640       NaN 0.9685640</code></pre>
+<pre class="r"><code># multiple fun.agg and value.var (all combinations)
+dcast(DT, x + y ~ z, fun=list(sum, mean), value.var=c(&quot;d1&quot;, &quot;d2&quot;))</code></pre>
+<pre><code>##    x y  d1_sum_a  d1_sum_b d2_sum_a d2_sum_b d1_mean_a d1_mean_b d2_mean_a
+## 1: 1 1 1.6540660 0.0000000        2        0 0.8270330       NaN         1
+## 2: 1 2 0.2298821 0.0000000        1        0 0.2298821       NaN         1
+## 3: 2 1 1.8227407 0.9603913        3        2 0.6075802 0.4801956         1
+## 4: 2 2 0.7871082 0.2493722        2        2 0.3935541 0.1246861         1
+## 5: 3 1 0.0000000 0.6883470        0        2       NaN 0.3441735       NaN
+## 6: 3 2 0.9381460 1.8956403        1        2 0.9381460 0.9478201         1
+## 7: 4 1 0.5633317 0.0000000        1        0 0.5633317       NaN         1
+## 8: 5 1 0.0000000 0.7755347        0        1       NaN 0.7755347       NaN
+## 9: 5 2 0.0000000 0.9685640        0        1       NaN 0.9685640       NaN
+##    d2_mean_b
+## 1:       NaN
+## 2:       NaN
+## 3:         1
+## 4:         1
+## 5:         1
+## 6:         1
+## 7:       NaN
+## 8:         1
+## 9:         1</code></pre>
+<pre class="r"><code># multiple fun.agg and value.var (one-to-one)
+dcast(DT, x + y ~ z, fun=list(sum, mean), value.var=list(&quot;d1&quot;, &quot;d2&quot;))</code></pre>
+<pre><code>##    x y  d1_sum_a  d1_sum_b d2_mean_a d2_mean_b
+## 1: 1 1 1.6540660 0.0000000         1       NaN
+## 2: 1 2 0.2298821 0.0000000         1       NaN
+## 3: 2 1 1.8227407 0.9603913         1         1
+## 4: 2 2 0.7871082 0.2493722         1         1
+## 5: 3 1 0.0000000 0.6883470       NaN         1
+## 6: 3 2 0.9381460 1.8956403         1         1
+## 7: 4 1 0.5633317 0.0000000         1       NaN
+## 8: 5 1 0.0000000 0.7755347       NaN         1
+## 9: 5 2 0.0000000 0.9685640       NaN         1</code></pre>
+</div>
+</div>
+<div id="others" class="section level2">
+<h2>Others</h2>
+<p><code>setnames()</code> is used to create or update column names</p>
+<pre class="r"><code># Syntax of setnames(): setnames(DT,&quot;old&quot;,&quot;new&quot;)
+setnames(DT,&quot;V2&quot;,&quot;Rating&quot;)</code></pre>
+<p><code>setcolorder()</code> is used to reorder columns by reference.</p>
+<pre class="r"><code>setcolorder(DT, c(&quot;V2&quot;,&quot;V1&quot;,&quot;V4&quot;,&quot;V3&quot;)) </code></pre>
+</div>
