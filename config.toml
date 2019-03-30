@@ -33,8 +33,7 @@ hasCJKLanguage = true
     author = "Xiaojun Sun"
     dateFormat = "2006/01/02"
     description = "A personal blog built through Hugo and blogdown."
-    footer = "&copy; [XiaojunSun](https://github.com/xiaojunsun) 2018 | Powered by the [Hugo](https://gohugo.io/) and [blogdown](https://github.com/rstudio/blogdown)"
-
+    footer = "&copy; [Xiaojun Sun](https://github.com/xiaojunsun) 2019 | Powered by the [Hugo](https://gohugo.io/) and [blogdown](https://github.com/rstudio/blogdown)"
     
     # options for highlight.js (version, additional languages, and theme)
     highlightjsVersion = "9.11.0"

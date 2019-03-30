@@ -15,4 +15,3 @@ tags:
 [guide1](https://alison.rbind.io/post/up-and-running-with-blogdown/)
 
 [theme](https://themes.gohugo.io/theme/charaka-hugo-theme/)
-

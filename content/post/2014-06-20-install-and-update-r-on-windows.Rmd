@@ -9,13 +9,11 @@ tags:
   - R
 ---
 
-R is a language and environment for statistical computing and graphics. It is widely used around the world. Here I briefly describe the steps to install and upgrade R for R beginners. This post is written for Windows user. If you use Mac, please search Google for instruction. If you have already installed R on your computer, you can jump to step two.
+R is a language and environment for statistical analysis. It is widely used around the world. Here I briefly describe the steps to install and upgrade R for R beginners. This post is written for Windows user. If you use Mac, please search Google for instruction. If you have already installed R on your computer, you can jump to step two.
 
 ## Step 1: Install R and Rstudio
 
 The latest version of R can be download from [CRAN][2]. Rstudio Desktop can be download from it's [official site][3]. 
-
-![Rstudio](http://i.imgbox.com/IHpsi4Gn.png )
 
 ### Install R
 
@@ -29,7 +27,7 @@ Choose according to you PC operation system.
 
 If you install it successfully, you open R and will see this:
 
-![installR03](http://i.imgbox.com/5aw3DW4B.jpg "R windows") 
+![installR03](http://i.imgbox.com/5aw3DW4B.jpg "R on windows") 
 
 ### Install Rstudio Desktop
 
@@ -46,9 +44,7 @@ Open Rstudio you will see this.
 
 Now we set up the global library for R. More details about this is described in [Tal Galili's blog post][1]. Although you are using the latest version of R, you can still follow my steps. It will help you set a global library for R. This will prevent some troubles in the future.
 
-Open your R. Run `chooseCRANmirror()` command line(Type it and hit `ENTER`) .Choose `China(Xiamen)`.
-
-[mirror](http://i.imgbox.com/nMC12nzx.jpg "Choose Mirror")
+Open your R. Run `chooseCRANmirror()` command line(Type it and hit `ENTER`) . Then choose `China(Xiamen)`.
 
 Run the following codes line by line.
 
@@ -61,7 +57,6 @@ Old.R.RunMe()
 ![oldr](http://i.imgbox.com/yn5SmnIH.jpg)
 
 It will ask you whether or not to quit R. Just type `n` and hit `ENTER`. Then run `New.R.RunMe()` just the same way.
-
 
 Once you have done these, from now on, whenever you want to update to a new version of R in the future, all you will need to do are the following **TWO** steps:
 
