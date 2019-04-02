@@ -1,0 +1,287 @@
+---
+title: LP02-Python语法基础
+author: Xiaojun Sun
+date: '2019-04-02'
+slug: lp02-python语法基础
+categories:
+  - Learn Python
+tags:
+  - Python
+output: html_document
+---
+
+以下内容主要参考[《利用Python进行数据分析·第2版》](https://www.jianshu.com/p/04d180d90a3f)
+
+### 类型
+
+先有类型 (Type)，而后才能生成实例 (Instance)。Python 中的一切都是对象，包括类型在内的每个对象都包含一个标准头，通过头部信息就可以明确知道其具体类型。
+
+Python被认为是强类型化语言，意味着每个对象都有明确的类型。知道对象的类型很重要，最好能让函数可以处理多种类型的输入。你可以用`isinstance`函数检查对象是某个类型的实例。 
+
+### 名字空间
+
+名字空间是 Python 最核心的内容。Python的名字实际上是一个字符串对象，它和所指向的目标对象一起在名字空间中构成一项 {name: object} 关联。
+
+名字的作用仅仅是在某个时刻与名字空间中的某个对象进行关联。其本身不包含目标对象的任何信息，只有通过对象头部的类型指针才能获知其具体类型，进而查找其相关成员数据。正因为名字的弱类型特征，我们可以在运行期间随时将其关联到任何类型对象。
+
+### `is` 和 `==` 的区别
+
+先来看几个例子： 
+
+```python
+a = "hello"
+b = "hello"
+print(a is b)  # 输出 True 
+print(a == b)  # 输出 True
+
+a = "hello world"
+b = "hello world"
+print(a is b)  # 输出 False
+print(a == b)  # 输出 True 
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+print(a is b)  # 输出 False
+print(a == b)  # 输出 True 
+
+a = [1, 2, 3]
+b = a
+print(a is b)  # 输出 True 
+print(a == b)  # 输出 True 
+```
+
+is 是检查两个对象是否指向同一块内存空间，而 == 是检查他们的值是否相等。
+
+一般情况下，如果 a is b 返回True的话，即 a 和 b 指向同一块内存地址的话，a == b 也返回True，即 a 和 b 的值也相等。只要 a 和 b 的值相等，a == b 就会返回True，而只有 id(a) 和 id(b) 相等时，a is b 才返回 True。 
+
+### 导入
+
+在Python中，模块就是一个有`.py`扩展名、包含Python代码的文件。假设有以下模块：
+
+```python
+# some_module.py
+PI = 3.14159
+
+def f(x):
+    return x + 2
+
+def g(a, b):
+    return a + b
+```
+
+如果想从同目录下的另一个文件访问`some_module.py`中定义的变量和函数，可以：
+
+```python
+import some_module
+result = some_module.f(5)
+pi = some_module.PI
+```
+
+或者：
+
+```python
+from some_module import f, g, PI
+result = g(5, PI)
+```
+
+使用`as`关键词，你可以给引入起不同的变量名：
+
+```python
+import some_module as sm
+from some_module import PI as pi, g as gf
+
+r1 = sm.f(pi)
+r2 = gf(6, pi)
+```
+
+###  可变与不可变对象
+
+Python中的大多数对象，比如列表、字典、NumPy数组、用户定义的类型（类），都是可变的。这意味着这些对象或包含的值可以被修改：
+
+```python
+a_list = ['foo', 2, [4, 5]]
+
+a_list[2] = (3, 4)
+```
+
+其它的，例如字符串和元组，是不可变的：
+
+```python
+In [1]: a_tuple = (3, 5, (4, 5))
+
+In [2]: a_tuple[1] = 'four'
+---------------------------------------------------------------------------
+TypeError: 'tuple' object does not support item assignment
+```
+
+记住，可以修改一个对象并不意味就要修改它。这被称为*副作用*。例如，当写一个函数，任何副作用都要在文档或注释中写明。如果可能的话，我推荐避免副作用，采用不可变的方式，即使要用到可变对象。
+
+### 控制流
+
+#### if、elif和else
+
+```python
+# 直接看例子
+if x < 0:
+    print('It's negative')
+elif x == 0:
+    print('Equal to zero')
+elif 0 < x < 5:
+    print('Positive but smaller than 5')
+else:
+    print('Positive and larger than or equal to 5')
+```
+
+#### for循环
+
+ for循环是在一个集合（列表或元组）中进行迭代。可以用`break`跳出for循环。
+
+```python
+sequence = [1, 2, None, 4, None, 10]
+total = 0
+for value in sequence:
+    if value is None:
+        continue
+    if value==10:
+    	  break
+    total += value
+```
+
+循环语句可能带有一个 `else` 子句；它会在循环遍历完列表 (使用 `for`) 或是在条件变为假 (使用 `while`) 的时候被执行，但是不会在循环被 [`break`](<https://docs.python.org/zh-cn/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops>) 语句终止时被执行。 
+
+```python
+for n in range(4, 6):
+    for w in range(2, n):
+        if n % w == 0:
+            print(n, '=', w, '*', n // w)
+            break
+    else:
+        # loop fell through without finding a factor
+        print(n, 'is a prime number')
+```
+
+如果在循环内需要修改序列中的值（比如重复某些选中的元素），推荐你先拷贝一份副本，切片操作使这件事非常简单：
+
+```python
+for w in words[:]:  # Loop over a slice copy of the entire list.
+    if len(w) > 6:
+    words.insert(0, w)
+```
+
+如果写成 `for w in words:`，这个示例就会创建无限长的列表。
+
+#### while循环
+
+```python
+x = 256; total = 0
+while x > 0:
+    if total > 500:
+        break
+    total += x
+    x = x//2
+```
+
+#### continue
+
+[`continue`](https://docs.python.org/zh-cn/3/reference/simple_stmts.html#continue) 在语法上只会出现于`for`或 `while` 循环所嵌套的代码，它会继续执行最近的外层循环的下一个轮次。
+
+```python
+for n in range(3, 6):
+    if n % 2 == 0:
+        print('Find a even number: ', n)
+        continue
+    print('Find a odd number: ', n)
+```
+
+#### pass
+
+pass是Python中的非操作语句。代码块不需要任何动作时可以使用（作为未执行代码的占位符） 。
+
+```python
+if x < 0:
+    print('negative!')
+elif x == 0:
+    pass
+else:
+    print('positive!')
+```
+
+#### range
+
+ range函数返回一个迭代器，它产生一个均匀分布的整数序列，比如：`range(10)`，`range(0, 20, 2)`。
+
+```python
+for i in range(5):
+    print(i)
+```
+
+####  三元表达式
+
+ Python中的三元表达式可以将if-else语句放到一行里。 
+
+```python
+value = true-expr if condition else false-expr
+```
+
+### 文件和操作系统
+
+#### 文件的读写和关闭
+
+```python
+f=open('somefile.txt')
+f.readline()#表示读文件的一行
+f.readlines()#表示把文件从头到尾都读出来，并保存为一个列表
+#使用文件应该牢记关闭
+f.close()
+#更推荐下面这种方法，因为它会自动帮你关闭文件
+with open(r'somefile.txt') as f:
+	f.readlines()
+#写入
+f.write()#表示把字符串写入
+f.writelines()#表示把一个列表写入
+```
+
+![](http://ww1.sinaimg.cn/large/748b26cfly1g1nicb5l0nj20jg069dhg.jpg)
+
+
+
+#### os模块
+[os模块](https://python101.pythonlibrary.org/chapter16_os.html)提供了一种方便的使用操作系统函数的方法。
+
+```python
+import os
+#假设在当前的目录下有一个abc.txt
+#重命名文件
+os.rename('abc.txt','a123.txt')
+#删除文件
+if os.path.exists('a123.txt'):
+  os.remove('a123.txt')
+#文件路径的处理
+#假设有一个文件路径：path='/users/Python/Data/info.txt'
+print os.path.dirname(path)
+#分割文件名
+print os.path.basename(path)
+#分割文件的后缀
+print os.path.split(path) #('/users/Python/Data', 'info.txt')
+#创建目录
+os.mkdir('test01')#在当前目录下创建一个test01目录
+os.mkdir('test02')#在当前目录下创建一个test02目录
+#最后先判断目录是否存在
+if not os.path.exists('test01'):
+    os.mkdir('test01')
+#列出当前目录下的所有文件和文件夹
+print os.listdir('.')
+print list(os.walk('.')) 
+#返回当前的目录
+print os.getcwd()
+#删除目录，目录不为空时会报错
+os.rmdir('test02')
+#shutil模块可以删除非空目录
+shutil.rmtree('test02')
+#判断是否为文件
+print os.path.isfile('test01')
+#判断是否为目录
+print os.path.isdir('test01')
+#判断文件或者目录是否存在
+print os.path.exists('demo_file.py')
+```

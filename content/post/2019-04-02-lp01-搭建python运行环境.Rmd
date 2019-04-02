@@ -1,0 +1,130 @@
+---
+title: LP01-搭建Python运行环境
+author: Xiaojun Sun
+date: '2019-04-02'
+slug: lp01-搭建python运行环境
+categories:
+  - Learn Python
+tags:
+  - Python
+output: html_document
+---
+
+### 安装Anaconda
+
+推荐使用Anaconda安装Python运行环境， 在国内推荐[清华大学开源软件镜像站](https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/)进行下载。下载完成后安装，注意Anaconda安装路径不要出现空格 。
+
+Anaconda安装成功之后，我们需要修改其包管理镜像为国内源。打开*Anaconda Prompt*，输入：
+
+```python
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+```
+
+### 环境管理 
+
+[conda](https://conda.io/docs/user-guide/tasks/index.html)是包和环境的管理工具，适用于Python，R，Ruby等语言，在Anaconda中默认安装； pip则是单纯的Python包管理器，在Python中默认安装 。 一般推荐使用conda进行包和环境的管理。在Anaconda中Python的不同版本可以共存，使用conda可以创建当前环境（base）以外的新环境，如：
+
+```python
+conda create -n py27 python=2.7 
+#创建一个名字为py27，Python版本为2.7的新环境。Anaconda会自动下载安装相关的软件和包。
+```
+
+激活、退出和删除环境：
+
+```python
+activate py27 #激活环境
+deactivate    #退出环境
+conda remove --name py27 --all #删除环境
+```
+
+`conda env list` 可以列出所有的环境。 
+
+### 包的管理
+
+Anaconda中包的管理主要通过`conda`进行，以下命令均在*Anaconda Prompt*中执行。参阅：[官方文档](https://conda.io/docs/user-guide/tasks/manage-pkgs.html)。
+
+#### 搜索包
+
+```python
+conda search scipy
+conda search --override-channels --channel defaults scipy #在Anaconda.org搜索
+```
+
+#### 安装包
+
+```python
+conda install -n myenv mypackage #在指定环境中安装包
+conda install mypackage #在当前环境中安装包
+conda install scipy=0.15.0 #安装指定版本的scipy包
+conda install scipy curl #同时安装多个包
+conda list #列出已安装的包
+```
+
+也可以在 Anaconda Prompt中安装不在Anaconda上的包，但需要确保已在Anaconda中安装了pip包。如果没有安装可以通过`conda install pip`来安装。接着用pip安装需要的包即可：
+
+```python
+pip install mypackage #用pip安装包
+```
+
+#### 更新包
+
+```python
+conda update mypackage #更新包
+conda update python #更新python
+conda update conda #更新conda
+conda update anaconda #Update Anaconda metapackage(所有的包)
+```
+
+#### 卸载包
+
+```python
+conda remove mypackage #卸载包
+```
+
+### 打开Jupyter Notebook
+
+使用Jupyter Notebook之前，建议先更改Jupyter Notebook 打开的目录。右键点击Jupyter Notebook图标选择**属性**，将**目标**栏位从`...-notebook-script.py %USERPROFILE%`修改为`...-notebook-script.py D:\\MyPython\Dir %USERPROFILE%`。其中`D:\\MyPython\Dir`就是你希望打开的目录。
+
+然后点击Jupyter Notebook图标即可打开。
+
+### IPython常用功能
+IPython是一个Python的交互式 shell，比默认的python shell好用得多，支持变量自动补全，自动缩进，支持 bash shell 命令，内置了许多很有用的功能和函数。
+
+#### 帮助
+
+可以搜索官方的最详细的[帮助文档](https://docs.python.org/3/library/index.html)，可以点击Spyder的工具栏中的*HELP*查看帮助文档，可以使用help函数查询帮助，比如`help(abs)` 。
+
+#### Tab补全
+
+Tab补全功能可以搜索已输入变量（对象、函数等等）的命名空间，可以补全任何对象的方法和属性，可以补全文件路径，可以补全函数的关键词参数（包括等于号`=`） 。
+
+#### 自省
+
+在变量前后使用问号`？`，可以显示对象的信息： 
+
+```python
+print?
+?print
+```
+
+`？`可以搜索IPython的命名空间。字符与通配符结合可以匹配所有的名字。 
+
+```python
+import numpy as np
+np.*load?   
+np.*load*?
+```
+
+#### %run命令
+```python
+%run ipython_script_test.py
+```
+
+#### 中断运行的代码
+
+代码运行时按Ctrl-C，无论是%run或长时间运行命令，都会导致`KeyboardInterrupt`。这会导致几乎所有Python程序立即停止。
+
+#### 魔术命令
+
+IPython提供了许多方便易用的魔术命令。魔术命令都带有百分号%前缀 。常用的有`%pwd`，`%timeit`，`%time`，`%reset`，`%who`，`%magic `等。详细信息可参考[官方文档](https://ipython.readthedocs.io/en/stable/interactive/magics.html)。

@@ -14,12 +14,13 @@ categories: Tutorial
 众所周知，CSS文件是用来控制网页渲染效果的。本文采用的方法就是用定制化的CSS文件来编译.Rmd文件，这主要归功于RStudio和knitr包提供的扩展功能。
 在RStudio中新建或打开.Rmd文件，点击齿轮图表可以看到Output Options，这里可以设置.Rmd文件的编译选项。勾选Apply CSS file，输入CSS文件路径，就可以使用自定义的CSS文件编译.Rmd文件了。勾选Apply CSS file后最好不要勾选Apply theme，以免出现冲突。
 
-![](/images/20190330102223.png)
+![](http://ww1.sinaimg.cn/large/748b26cfly1g1oku0ch6qj20jd0c23zv.jpg)
 
 使用CSS文件编译前后的效果可以可以参考下图：
 
-![](/images/20190330102526.png)
+![](http://ww1.sinaimg.cn/large/748b26cfly1g1ojovc143j20ny07stat.jpg)
 
 编写CSS文件需要一定的CSS知识基础，但是也有一些简单的办法。首先你可以复制一份别人的CSS文件进行编译，然后在浏览器中打开网页文件，鼠标右键选择‘检查’或Ctrl+Shift+I（以Chrome为例）。在样式栏里可以对一些参数进行修改尝试，找到满意的参数后再回来修改CSS文件，如此反复最后就能得到一套自己满意的CSS样式设置了。以后编写和编译.Rmd文件，直接调用这个CSS文件就大功告成了。
-![](/images/20190330102651.png)
+
+![](http://ww1.sinaimg.cn/large/748b26cfly1g1ojpc8jsqj20ny0ba0wn.jpg)
 

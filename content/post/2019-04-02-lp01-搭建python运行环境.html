@@ -1,0 +1,101 @@
+---
+title: LP01-搭建Python运行环境
+author: Xiaojun Sun
+date: '2019-04-02'
+slug: lp01-搭建python运行环境
+categories:
+  - Learn Python
+tags:
+  - Python
+output: html_document
+---
+
+
+
+<div id="anaconda" class="section level3">
+<h3>安装Anaconda</h3>
+<p>推荐使用Anaconda安装Python运行环境， 在国内推荐<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/">清华大学开源软件镜像站</a>进行下载。下载完成后安装，注意Anaconda安装路径不要出现空格 。</p>
+<p>Anaconda安装成功之后，我们需要修改其包管理镜像为国内源。打开<em>Anaconda Prompt</em>，输入：</p>
+<pre class="python"><code>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes</code></pre>
+</div>
+<div id="section" class="section level3">
+<h3>环境管理</h3>
+<p><a href="https://conda.io/docs/user-guide/tasks/index.html">conda</a>是包和环境的管理工具，适用于Python，R，Ruby等语言，在Anaconda中默认安装； pip则是单纯的Python包管理器，在Python中默认安装 。 一般推荐使用conda进行包和环境的管理。在Anaconda中Python的不同版本可以共存，使用conda可以创建当前环境（base）以外的新环境，如：</p>
+<pre class="python"><code>conda create -n py27 python=2.7 
+#创建一个名字为py27，Python版本为2.7的新环境。Anaconda会自动下载安装相关的软件和包。</code></pre>
+<p>激活、退出和删除环境：</p>
+<pre class="python"><code>activate py27 #激活环境
+deactivate    #退出环境
+conda remove --name py27 --all #删除环境</code></pre>
+<p><code>conda env list</code> 可以列出所有的环境。</p>
+</div>
+<div id="section-1" class="section level3">
+<h3>包的管理</h3>
+<p>Anaconda中包的管理主要通过<code>conda</code>进行，以下命令均在<em>Anaconda Prompt</em>中执行。参阅：<a href="https://conda.io/docs/user-guide/tasks/manage-pkgs.html">官方文档</a>。</p>
+<div id="section-2" class="section level4">
+<h4>搜索包</h4>
+<pre class="python"><code>conda search scipy
+conda search --override-channels --channel defaults scipy #在Anaconda.org搜索</code></pre>
+</div>
+<div id="section-3" class="section level4">
+<h4>安装包</h4>
+<pre class="python"><code>conda install -n myenv mypackage #在指定环境中安装包
+conda install mypackage #在当前环境中安装包
+conda install scipy=0.15.0 #安装指定版本的scipy包
+conda install scipy curl #同时安装多个包
+conda list #列出已安装的包</code></pre>
+<p>也可以在 Anaconda Prompt中安装不在Anaconda上的包，但需要确保已在Anaconda中安装了pip包。如果没有安装可以通过<code>conda install pip</code>来安装。接着用pip安装需要的包即可：</p>
+<pre class="python"><code>pip install mypackage #用pip安装包</code></pre>
+</div>
+<div id="section-4" class="section level4">
+<h4>更新包</h4>
+<pre class="python"><code>conda update mypackage #更新包
+conda update python #更新python
+conda update conda #更新conda
+conda update anaconda #Update Anaconda metapackage(所有的包)</code></pre>
+</div>
+<div id="section-5" class="section level4">
+<h4>卸载包</h4>
+<pre class="python"><code>conda remove mypackage #卸载包</code></pre>
+</div>
+</div>
+<div id="jupyter-notebook" class="section level3">
+<h3>打开Jupyter Notebook</h3>
+<p>使用Jupyter Notebook之前，建议先更改Jupyter Notebook 打开的目录。右键点击Jupyter Notebook图标选择<strong>属性</strong>，将<strong>目标</strong>栏位从<code>...-notebook-script.py %USERPROFILE%</code>修改为<code>...-notebook-script.py D:\\MyPython\Dir %USERPROFILE%</code>。其中<code>D:\\MyPython\Dir</code>就是你希望打开的目录。</p>
+<p>然后点击Jupyter Notebook图标即可打开。</p>
+</div>
+<div id="ipython" class="section level3">
+<h3>IPython常用功能</h3>
+<p>IPython是一个Python的交互式 shell，比默认的python shell好用得多，支持变量自动补全，自动缩进，支持 bash shell 命令，内置了许多很有用的功能和函数。</p>
+<div id="section-6" class="section level4">
+<h4>帮助</h4>
+<p>可以搜索官方的最详细的<a href="https://docs.python.org/3/library/index.html">帮助文档</a>，可以点击Spyder的工具栏中的<em>HELP</em>查看帮助文档，可以使用help函数查询帮助，比如<code>help(abs)</code> 。</p>
+</div>
+<div id="tab" class="section level4">
+<h4>Tab补全</h4>
+<p>Tab补全功能可以搜索已输入变量（对象、函数等等）的命名空间，可以补全任何对象的方法和属性，可以补全文件路径，可以补全函数的关键词参数（包括等于号<code>=</code>） 。</p>
+</div>
+<div id="section-7" class="section level4">
+<h4>自省</h4>
+<p>在变量前后使用问号<code>？</code>，可以显示对象的信息：</p>
+<pre class="python"><code>print?
+?print</code></pre>
+<p><code>？</code>可以搜索IPython的命名空间。字符与通配符结合可以匹配所有的名字。</p>
+<pre class="python"><code>import numpy as np
+np.*load?   
+np.*load*?</code></pre>
+</div>
+<div id="run" class="section level4">
+<h4>%run命令</h4>
+<pre class="python"><code>%run ipython_script_test.py</code></pre>
+</div>
+<div id="section-8" class="section level4">
+<h4>中断运行的代码</h4>
+<p>代码运行时按Ctrl-C，无论是%run或长时间运行命令，都会导致<code>KeyboardInterrupt</code>。这会导致几乎所有Python程序立即停止。</p>
+</div>
+<div id="section-9" class="section level4">
+<h4>魔术命令</h4>
+<p>IPython提供了许多方便易用的魔术命令。魔术命令都带有百分号%前缀 。常用的有<code>%pwd</code>，<code>%timeit</code>，<code>%time</code>，<code>%reset</code>，<code>%who</code>，<code>%magic</code>等。详细信息可参考<a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html">官方文档</a>。</p>
+</div>
+</div>
