@@ -22,11 +22,12 @@ tags:
 <div id="section-1" class="section level4">
 <h4>字符串</h4>
 <p>你可以用单引号或双引号来表示字符串。反斜杠 <code>\</code> 可以用来转义，被用来表示特殊字符 。</p>
-<pre class="python"><code>print(&#39;&quot;Yes,&quot; they said.&#39;)
-print(&quot;\&quot;Yes,\&quot; they said.&quot;)
-# &quot;Yes,&quot; they said.
-print(&#39;&quot;Isn\&#39;t,&quot; they said.&#39;)
-# &quot;Isn&#39;t,&quot; they said.</code></pre>
+<pre class="python"><code>print(&#39;&quot;Yes,&quot; they said.&#39;)</code></pre>
+<pre><code>## &quot;Yes,&quot; they said.</code></pre>
+<pre class="python"><code>print(&quot;\&quot;Yes,\&quot; they said.&quot;)</code></pre>
+<pre><code>## &quot;Yes,&quot; they said.</code></pre>
+<pre class="python"><code>print(&#39;&quot;Isn\&#39;t,&quot; they said.&#39;)</code></pre>
+<pre><code>## &quot;Isn&#39;t,&quot; they said.</code></pre>
 <p>如果字符串中包含许多反斜杠，但没有特殊字符，这样做就很麻烦。幸好，可以在字符串前面加一个<code>r</code>，表明<code>/</code>字符就是它自身，<code>r</code>的含义是原始字符串raw：</p>
 <pre class="python"><code>s = r&#39;this\has\no\special\characters&#39;
 print(s)</code></pre>
@@ -61,10 +62,11 @@ age = 18
 f&quot;hi, {name}, are you {age}&quot;</code></pre>
 <pre><code>## &#39;hi, hoxis, are you 18&#39;</code></pre>
 <p>因为 f-strings 是在运行时计算的，那么这就意味着你可以在其中放置任意合法的 Python 表达式，比如：</p>
-<pre class="python"><code>f&quot;{ 2 * 3 + 1}&quot;  #7</code></pre>
+<pre class="python"><code>f&quot;{ 2 * 3 + 1}&quot;</code></pre>
 <pre><code>## &#39;7&#39;</code></pre>
-<pre class="python"><code>f&quot;{3.1415326: 2.3}&quot;  #3.14</code></pre>
-<pre><code>## &#39; 3.14&#39;</code></pre>
+<pre class="python"><code>import math
+print(f&#39;The value of pi is approximately {math.pi:.3f}.&#39;)</code></pre>
+<pre><code>## The value of pi is approximately 3.142.</code></pre>
 </div>
 <div id="section-2" class="section level4">
 <h4>数字</h4>
@@ -214,7 +216,7 @@ a.replace(&#39;a&#39;, &#39;A&#39;)</code></pre>
 seq2 = [&#39;one&#39;, &#39;two&#39;, &#39;three&#39;]
 zipped = zip(seq1, seq2)
 zipped</code></pre>
-<pre><code>## &lt;zip object at 0x00000000267F9308&gt;</code></pre>
+<pre><code>## &lt;zip object at 0x0000000025F8C288&gt;</code></pre>
 <p><code>zip</code>可以处理任意多的序列，元素的个数取决于最短的序列。<code>zip</code>的常见用法之一是同时迭代多个序列，可能结合<code>enumerate</code>使用 。</p>
 <p><code>zip</code>也可以当作把行的列表转换为列的列表（很神奇）。</p>
 <pre class="python"><code>pitchers = [(&#39;Nolan&#39;, &#39;Ryan&#39;), (&#39;Roger&#39;, &#39;Clemens&#39;), (&#39;Schilling&#39;, &#39;Curt&#39;)]
@@ -230,6 +232,14 @@ first_names;last_names</code></pre>
 <pre class="python"><code>[expr for val in collection if condition]
 dict_comp = {key-expr : value-expr for value in collection if condition} #字典
 set_comp = {expr for value in collection if condition} #集合</code></pre>
+<p>举例如下：</p>
+<pre class="python"><code>print([i**2 for i in range(20) if i % 3 is 0])</code></pre>
+<pre><code>## [0, 9, 36, 81, 144, 225, 324]</code></pre>
+<pre class="python"><code>mcase = {&#39;a&#39;: 10, &#39;b&#39;: 34}
+print({v: k for k, v in mcase.items()})</code></pre>
+<pre><code>## {10: &#39;a&#39;, 34: &#39;b&#39;}</code></pre>
+<pre class="python"><code>print({x**2 for x in [1, 1, 2]})</code></pre>
+<pre><code>## {1, 4}</code></pre>
 <p>嵌套列表推导式，包含两层for循环：</p>
 <pre class="python"><code>some_tuples = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
 flattened = [x for tup in some_tuples for x in tup if x&gt;5]

@@ -24,12 +24,10 @@ type(None)   #NoneType
 
  你可以用单引号或双引号来表示字符串。反斜杠 `\` 可以用来转义，被用来表示特殊字符 。
 
-```python
+```{python engine.path="D:/Project/Anaconda3/python.exe"}
 print('"Yes," they said.')
 print("\"Yes,\" they said.")
-# "Yes," they said.
 print('"Isn\'t," they said.')
-# "Isn't," they said.
 ```
 
 如果字符串中包含许多反斜杠，但没有特殊字符，这样做就很麻烦。幸好，可以在字符串前面加一个`r`，表明`/`字符就是它自身，`r`的含义是原始字符串raw：
@@ -90,8 +88,9 @@ f"hi, {name}, are you {age}"
 因为 f-strings 是在运行时计算的，那么这就意味着你可以在其中放置任意合法的 Python 表达式，比如： 
 
 ```{python}
-f"{ 2 * 3 + 1}"  #7
-f"{3.1415326: 2.3}"  #3.14
+f"{ 2 * 3 + 1}"
+import math
+print(f'The value of pi is approximately {math.pi:.3f}.')
 ```
 
 #### 数字
@@ -330,6 +329,14 @@ first_names;last_names
 dict_comp = {key-expr : value-expr for value in collection if condition} #字典
 set_comp = {expr for value in collection if condition} #集合
 ```
+举例如下：
+```{python}
+print([i**2 for i in range(20) if i % 3 is 0])
+mcase = {'a': 10, 'b': 34}
+print({v: k for k, v in mcase.items()})
+print({x**2 for x in [1, 1, 2]})
+```
+
 
 嵌套列表推导式，包含两层for循环：
 
