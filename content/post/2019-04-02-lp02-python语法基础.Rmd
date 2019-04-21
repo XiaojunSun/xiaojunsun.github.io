@@ -147,7 +147,7 @@ f.write()#表示把字符串写入
 f.writelines()#表示把一个列表写入
 ```
 
-![](http://ww1.sinaimg.cn/large/748b26cfly1g1nicb5l0nj20jg069dhg.jpg)
+![](https://ww1.sinaimg.cn/large/748b26cfly1g1nicb5l0nj20jg069dhg.jpg)
 
 #### os模块
 [os模块](https://python101.pythonlibrary.org/chapter16_os.html)提供了一种方便的使用操作系统函数的方法。

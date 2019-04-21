@@ -10,7 +10,7 @@ tags:
 ---
 ### 标量类型
 
-![](http://ww1.sinaimg.cn/large/748b26cfly1g1nicb4warj20jg05e3ys.jpg)
+![](https://ww1.sinaimg.cn/large/748b26cfly1g1nicb4warj20jg05e3ys.jpg)
 
 #### None
 
@@ -97,7 +97,7 @@ print(f'The value of pi is approximately {math.pi:.3f}.')
 
 数字的二元运算符包括：
 
-![](http://ww1.sinaimg.cn/large/748b26cfly1g1nib2pknxj20mj0elt8u.jpg)
+![](https://ww1.sinaimg.cn/large/748b26cfly1g1nib2pknxj20mj0elt8u.jpg)
 
 ```{python}
 (30 - 2 * 3) / 5
@@ -262,7 +262,7 @@ s1 & s2
 s1 | s2
 ```
 
-![](http://ww1.sinaimg.cn/large/748b26cfly1g1nicb4wppj20jb0cjt8r.jpg)
+![](https://ww1.sinaimg.cn/large/748b26cfly1g1nicb4wppj20jb0cjt8r.jpg)
 
 
 ### 不可变对象
