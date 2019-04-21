@@ -13,7 +13,7 @@ tags:
 
 <div id="section" class="section level3">
 <h3>标量类型</h3>
-<p><img src="http://ww1.sinaimg.cn/large/748b26cfly1g1nicb4warj20jg05e3ys.jpg" /></p>
+<p><img src="https://ww1.sinaimg.cn/large/748b26cfly1g1nicb4warj20jg05e3ys.jpg" /></p>
 <div id="none" class="section level4">
 <h4>None</h4>
 <p>None是Python的空值类型。如果一个函数没有明确的返回值，就会默认返回None。None也常常作为函数的默认参数。None不仅是一个保留字，还是唯一的NoneType的实例：</p>
@@ -51,10 +51,13 @@ pre + &#39;thon&#39;</code></pre>
 <pre><code>## &#39;python&#39;</code></pre>
 <p>字符串是可以被 <em>索引</em> （下标访问）的，第一个字符索引是 0。单个字符并没有特殊的类型，只是一个长度为一的字符串：</p>
 <pre class="python"><code>word = &#39;Python&#39;
-word[0]  #&#39;P&#39;
-word[-1] #&#39;n&#39;</code></pre>
+word[0]  #&#39;P&#39;</code></pre>
+<pre><code>## &#39;P&#39;</code></pre>
+<pre class="python"><code>word[-1] #&#39;n&#39;</code></pre>
+<pre><code>## &#39;n&#39;</code></pre>
 <p>除了索引，字符串还支持 <em>切片</em>。索引可以得到单个字符，而 <em>切片</em> 可以获取子字符串。注意切片的开始总是被包括在结果中，而结束不被包括。这使得 <code>s[:i] + s[i:]</code> 总是等于 <code>s</code>。</p>
 <pre class="python"><code>word[:2] #&#39;Py&#39;</code></pre>
+<pre><code>## &#39;Py&#39;</code></pre>
 <p>Python 中的字符串不能被修改，它们是 <a href="https://docs.python.org/zh-cn/3/glossary.html#term-immutable">immutable</a> 的。因此，向字符串的某个索引位置赋值会产生错误。</p>
 <p>在Python 3中推荐使用<a href="https://docs.python.org/zh-cn/3/reference/lexical_analysis.html#formatted-string-literals">f-Strings</a> 进行字符串格式化。f-strings 是指以 <code>f</code> 或 <code>F</code> 开头的字符串，其中以 <code>{}</code> 包含的表达式会进行值替换。</p>
 <pre class="python"><code>name = &#39;hoxis&#39;
@@ -71,11 +74,12 @@ print(f&#39;The value of pi is approximately {math.pi:.3f}.&#39;)</code></pre>
 <div id="section-2" class="section level4">
 <h4>数字</h4>
 <p>数字的二元运算符包括：</p>
-<p><img src="http://ww1.sinaimg.cn/large/748b26cfly1g1nib2pknxj20mj0elt8u.jpg" /></p>
+<p><img src="https://ww1.sinaimg.cn/large/748b26cfly1g1nib2pknxj20mj0elt8u.jpg" /></p>
 <pre class="python"><code>(30 - 2 * 3) / 5</code></pre>
 <pre><code>## 4.8</code></pre>
 <p>在交互模式下，上一次打印出来的表达式被赋值给变量 <code>_</code>：</p>
 <pre class="python"><code>2 + _  #6.8</code></pre>
+<pre><code>## 6.8</code></pre>
 <p>可以把比较式串在一起: <code>a&gt;b&gt;c&gt;d</code>：</p>
 <pre class="python"><code>5&gt;2&gt;3&gt;1</code></pre>
 <pre><code>## False</code></pre>
@@ -126,7 +130,7 @@ t</code></pre>
 <p>可以用加号运算符将元组串联起来：</p>
 <pre class="python"><code>(4, None, &#39;foo&#39;) + (6, 0) + (&#39;bar&#39;,)</code></pre>
 <pre><code>## (4, None, &#39;foo&#39;, 6, 0, &#39;bar&#39;)</code></pre>
-<p>拆分元组</p>
+<p>拆分元组：</p>
 <pre class="python"><code>tup = (4, 5, 6)
 a, b, c = tup
 a, b = 1, 2
@@ -165,35 +169,38 @@ d.pop(&#39;Bob&#39;)
 <div id="set" class="section level3">
 <h3>集合set</h3>
 <p>set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以在set中没有重复的key。</p>
-<p>要创建一个set，需要提供一个list作为输入集合：</p>
-<pre class="python"><code>s = set([1, 2, 3])</code></pre>
-<p>注意，传入的参数<code>[1, 2, 3]</code>是一个list，而显示的<code>{1, 2, 3}</code>只是告诉你这个set内部有1，2，3这三个元素，显示的顺序也不表示set是有序的。。</p>
+<p>要创建一个set，可以提供一个list作为输入集合，或者使用<code>{...}</code>：</p>
+<pre class="python"><code>set([1, 2, 3])</code></pre>
+<pre><code>## {1, 2, 3}</code></pre>
+<pre class="python"><code>{1,2,3}</code></pre>
+<pre><code>## {1, 2, 3}</code></pre>
+<p>注意，传入的参数<code>[1, 2, 3]</code>是一个list，而显示的<code>{1, 2, 3}</code>只是告诉你这个set内部有1，2，3这三个元素，显示的顺序也不表示set是有序的。</p>
 <p>重复元素在set中自动被过滤：</p>
-<pre class="python"><code>s = set([1, 1, 2, 2, 3, 3])</code></pre>
-<pre class="python"><code># 可以添加元素到set中
+<pre class="python"><code>set([1, 1, 2, 2, 3, 3])</code></pre>
+<pre><code>## {1, 2, 3}</code></pre>
+<pre class="python"><code>s = {1, 1, 2, 2, 3, 3}
+# 可以添加元素到set中
 s.add(4)
 # 可以删除元素
 s.remove(4) </code></pre>
-<p>set可以看成数学意义上的无序和无重复元素的集合，因此，两个set可以做数学意义上的交集、并集等操作：</p>
+<p>set可以看成数学意义上的<strong>无序</strong>和<strong>无重复元素</strong>的集合，因此，两个set可以做数学意义上的交集、并集等操作：</p>
 <pre class="python"><code>s1 = set([1, 2, 3])
 s2 = set([2, 3, 4])
 s1 &amp; s2</code></pre>
 <pre><code>## {2, 3}</code></pre>
 <pre class="python"><code>s1 | s2</code></pre>
 <pre><code>## {1, 2, 3, 4}</code></pre>
-<p><img src="http://ww1.sinaimg.cn/large/748b26cfly1g1nicb4wppj20jb0cjt8r.jpg" /></p>
+<p><img src="https://ww1.sinaimg.cn/large/748b26cfly1g1nicb4wppj20jb0cjt8r.jpg" /></p>
 </div>
 <div id="section-3" class="section level3">
 <h3>不可变对象</h3>
-<p>str是不变对象，而list是可变对象。对于可变对象，比如list，对list进行操作，list内部的内容是会变化的，比如：</p>
-<pre class="python"><code>a = [&#39;c&#39;, &#39;b&#39;, &#39;a&#39;]
-a.sort()</code></pre>
-<p>而对于不可变对象，比如str，对str进行操作：</p>
-<pre class="python"><code>a = &#39;abc&#39;
-a.replace(&#39;a&#39;, &#39;A&#39;)</code></pre>
-<pre><code>## &#39;Abc&#39;</code></pre>
-<pre class="python"><code>a</code></pre>
-<pre><code>## &#39;abc&#39;</code></pre>
+<p>Python中的大多数对象，比如列表、字典、NumPy数组、用户定义的类，都是可变的。这意味着这些对象或包含的值可以被修改：</p>
+<pre class="python"><code>a_list = [&#39;foo&#39;, 2, [4, 5]]
+a_list[2] = (3, 4)</code></pre>
+<p>其它的，比如字符串和元组，是不可变的：</p>
+<pre class="python"><code>a_tuple = (3, 5, (4, 5))
+a_tuple[1] = &#39;four&#39; #TypeError</code></pre>
+<p>注意，可以修改一个对象并不意味就要修改它，这被称为<em>副作用</em>。</p>
 </div>
 <div id="section-4" class="section level3">
 <h3>序列函数</h3>
@@ -216,7 +223,7 @@ a.replace(&#39;a&#39;, &#39;A&#39;)</code></pre>
 seq2 = [&#39;one&#39;, &#39;two&#39;, &#39;three&#39;]
 zipped = zip(seq1, seq2)
 zipped</code></pre>
-<pre><code>## &lt;zip object at 0x0000000025F8C288&gt;</code></pre>
+<pre><code>## &lt;zip object at 0x0000000026439708&gt;</code></pre>
 <p><code>zip</code>可以处理任意多的序列，元素的个数取决于最短的序列。<code>zip</code>的常见用法之一是同时迭代多个序列，可能结合<code>enumerate</code>使用 。</p>
 <p><code>zip</code>也可以当作把行的列表转换为列的列表（很神奇）。</p>
 <pre class="python"><code>pitchers = [(&#39;Nolan&#39;, &#39;Ryan&#39;), (&#39;Roger&#39;, &#39;Clemens&#39;), (&#39;Schilling&#39;, &#39;Curt&#39;)]
