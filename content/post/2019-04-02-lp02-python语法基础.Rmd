@@ -15,25 +15,30 @@ output: html_document
 
 ### 控制流
 
-#### if、elif和else
+#### if语句
+
+Python中if语句的一般形式如下所示：
 
 ```python
-# 直接看例子
-if x < 0:
-    print('It's negative')
-elif x == 0:
-    print('Equal to zero')
-elif 0 < x < 5:
-    print('Positive but smaller than 5')
+if condition_1:
+    statement_block_1
+elif condition_2:
+    statement_block_2
 else:
-    print('Positive and larger than or equal to 5')
+    statement_block_3
 ```
+
+注意：
+
+- 每个条件后面要使用冒号 **:**，表示接下来是满足条件后要执行的语句块。
+- 使用缩进来划分语句块，相同缩进数的语句在一起组成一个语句块。
+- 在Python中没有switch – case语句。
 
 #### for循环
 
- for循环是在一个集合（列表或元组）中进行迭代。可以用`break`跳出for循环。
+for循环是在一个集合（列表或元组）中进行迭代。可以用`break`跳出for循环。
 
-```python
+```{python engine.path="D:/Project/Anaconda3/python.exe"}
 sequence = [1, 2, None, 4, None, 10]
 total = 0
 for value in sequence:
@@ -42,11 +47,12 @@ for value in sequence:
     if value==10:
     	  break
     total += value
+total
 ```
 
 循环语句可能带有一个 `else` 子句；它会在循环遍历完列表 (使用 `for`) 或是在条件变为假 (使用 `while`) 的时候被执行，但是不会在循环被 [`break`](<https://docs.python.org/zh-cn/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops>) 语句终止时被执行。 
 
-```python
+```{python}
 for n in range(4, 6):
     for w in range(2, n):
         if n % w == 0:
@@ -69,20 +75,21 @@ for w in words[:]:  # Loop over a slice copy of the entire list.
 
 #### while循环
 
-```python
+```{python}
 x = 256; total = 0
 while x > 0:
     if total > 500:
         break
     total += x
     x = x//2
+total
 ```
 
 #### continue
 
 [`continue`](https://docs.python.org/zh-cn/3/reference/simple_stmts.html#continue) 在语法上只会出现于`for`或 `while` 循环所嵌套的代码，它会继续执行最近的外层循环的下一个轮次。
 
-```python
+```{python}
 for n in range(3, 6):
     if n % 2 == 0:
         print('Find a even number: ', n)
@@ -92,7 +99,7 @@ for n in range(3, 6):
 
 #### pass
 
-pass是Python中的非操作语句。代码块不需要任何动作时可以使用（作为未执行代码的占位符） 。
+`pass`是Python中的非操作语句。代码块不需要任何动作时可以使用（作为未执行代码的占位符）。
 
 ```python
 if x < 0:
@@ -104,10 +111,8 @@ else:
 ```
 
 #### range
-
- range函数返回一个迭代器，它产生一个均匀分布的整数序列，比如：`range(10)`，`range(0, 20, 2)`。
-
-```python
+range函数返回一个迭代器，它产生一个均匀分布的整数序列，比如：`range(10)`，`range(0, 20, 2)`。
+```{python}
 for i in range(5):
     print(i)
 ```
@@ -115,9 +120,14 @@ for i in range(5):
 ####  三元表达式
 
 Python中的三元表达式可以将if-else语句放到一行里。 
-
 ```python
 value = true-expr if condition else false-expr
+```
+举例：
+```{python}
+cond = True
+x = 100 if cond else 0
+x
 ```
 
 ### 文件和操作系统
@@ -180,12 +190,6 @@ print os.path.isdir('test01')
 print os.path.exists('demo_file.py')
 ```
 
-### 类型初探
-
-先有类型 (Classes)，而后才能生成实例 (Instance)。Python 中的一切都是对象，包括类型在内的每个对象都包含一个标准头，通过头部信息就可以明确知道其具体类型。
-
-Python被认为是强类型化语言，意味着每个对象都有明确的类型。知道对象的类型很重要，最好能让函数可以处理多种类型的输入。你可以用`isinstance`函数检查对象是某个类型的实例。 
-
 
 #### `is` 和 `==` 的区别
 
@@ -216,25 +220,6 @@ print(a == b)  # 输出 True
 `is `是检查两个对象是否指向同一块内存空间，而 `==` 是检查他们的值是否相等。
 
 一般情况下，如果 a is b 返回True的话，即 a 和 b 指向同一块内存地址的话，a == b 也返回True，即 a 和 b 的值也相等。只要 a 和 b 的值相等，a == b 就会返回True，而只有 id(a) 和 id(b) 相等时，a is b 才返回 True。 
-
-####  可变与不可变对象
-
-Python中的大多数对象，比如列表、字典、NumPy数组、用户定义的类型（类），都是可变的。这意味着这些对象或包含的值可以被修改：
-
-```python
-a_list = ['foo', 2, [4, 5]]
-
-a_list[2] = (3, 4)
-```
-
-其它的，比如字符串和元组，是不可变的：
-
-```python
-a_tuple = (3, 5, (4, 5))
-a_tuple[1] = 'four' #TypeError
-```
-
-记住，可以修改一个对象并不意味就要修改它。这被称为*副作用*。例如，当写一个函数，任何副作用都要在文档或注释中写明。如果可能的话，推荐采用不可变的方式避免副作用，即使要用到可变对象。
 
 ### 模块
 模块是一个包含Python定义和声明的文件。文件名就是模块名后跟文件后缀 .py 。在一个模块内部，模块名（作为一个字符串）可以通过全局变量 `__name__` 的值获得。例如，使用在当前目录下创建一个名为 fibo.py 的文件， 文件中含有以下内容：
@@ -272,7 +257,7 @@ myfib = fibo.fib
 
 模块可以包含可执行语句以及已定义的函数。这些语句通常用于初始化模块。只有在导入语句中第一次遇到模块名称时，才会执行。如果文件以脚本的方式执行，它们也会运行。
 
-每个模块都有自己的私有符号表，它是被定义在模块中所有函数当作全局符号表一样使用。模块的作者可以在模块里使用全局变量，而不用担心与某个用户的全局变量有冲突。
+每个模块都有自己的私有符号表，它被定义在模块中所有函数当作全局符号表一样使用。
 
 模块中可以导入其它模块。一般来说，习惯性地将所有 `import` 语句放在模块（或脚本）的开头，但这不是必须的。被导入的模块的名字存放在导入模块的全局符号表中。
 
@@ -282,7 +267,7 @@ from fibo import fib, fib2
 ```
 一般情况下不建议使用`from fibo import *`这种导入方式，因为它会引入一系列未知的名称到解释器中，这很可能覆盖你已经定义的一些东西。
 
-使用`as`关键词，你可以给导入名称重命名：
+使用`as`关键词，你可以给导入的名称重命名：
 
 ```python
 from fibo import fib as fun1, fib2 as fun2
@@ -311,7 +296,7 @@ if __name__ == "__main__":
 对软件包来说，通过加入 `__main__.py` 模块可以达到同样的效果，当使用 `-m` 运行模块时，其中的代码会被执行。
 
 #### 编译好的模块
-为了加快加载模块的速度，Python在`__pycache__`目录下缓存每个模块编译好的版本，名字`为module.version.pyc`，其中version表示编译好的文件的格式；它一般包含Python的版本号。例如，在Python 3.3中，spam.py编译好的版本将缓存为 `__pycache__/spam.cpython-33.pyc`。这种命名约定允许由不同发布和不同版本的Python编译的模块同时存在。
+为了加快加载模块的速度，Python在`__pycache__`目录下缓存每个模块编译好的版本，名字为`module.version.pyc`，其中version表示编译好的文件的格式；它一般包含Python的版本号。例如，在Python 3.3中，spam.py编译好的版本将缓存为 `__pycache__/spam.cpython-33.pyc`。这种命名约定允许由不同发布和不同版本的Python编译的模块同时存在。
 
 Python会检查源文件和编译好的版本的修改日期，来查看它是否过期以及需要重新编译。这是完全自动化的过程。同时，编译后的模块是跨平台的，所以同一个库可以在不同架构的系统之间共享。
 
@@ -319,7 +304,7 @@ Python 在两种情况下不检查缓存。第一，它会始终重新编译而�
 
 ####  标准模块
 
-Python附带了一个标准模块库，在单独的Python库参考手册文档。有一些模块内置于解释器中；它们提供对不属于语言核心但仍然内置的操作的访问，以提高效率或提供对系统调用等操作系统原语的访问。这些模块的集合是一个配置选项，它也取决于底层平台。例如，winreg 模块只在Windows操作系统上提供。一个特别值得注意的模块 sys，它被内嵌到每一个Python解释器中。变量 sys.ps1 和 sys.ps2 定义了主提示符和辅助提示符使用的字符串:
+Python附带了一个标准模块库，有单独的Python库参考手册。有一些模块内置于解释器中；它们提供对不属于语言核心但仍然内置的操作的访问，以提高效率或提供对系统调用等操作系统原语的访问。这些模块的集合是一个配置选项，它也取决于底层平台。例如，winreg 模块只在Windows操作系统上提供。一个特别值得注意的模块 sys，它被内嵌到每一个Python解释器中。变量 sys.ps1 和 sys.ps2 定义了主提示符和辅助提示符使用的字符串:
 
 ```python
 import sys
@@ -330,7 +315,7 @@ sys.ps2
 
 #### dir()函数
 
-内置函数 dir() 用来找出模块中定义了哪些名字。它返回一个排好序的字符串列表：
+内置函数 dir() 用来找出模块中定义了哪些名称。它返回一个排好序的字符串列表：
 
 ```python
 dir(fibo)
@@ -352,8 +337,6 @@ dir(fibo)
 如果一个包的 `__init__.py` 代码定义了一个名为 `__all__` 的列表，它会被视为在遇到 from package import * 时应该导入的模块名列表。如果包作者认为从他的包中导入 * 的操作没有必要被使用，也可以决定不支持此列表。
 
 
-
-
 ### [命名空间和作用域](http://blog.cipherc.com/2015/04/25/python_namespace_and_scope)
 
 命名空间（namespace）是 Python 最核心的内容。Python的名字实际上是一个字符串对象，它和所指向的目标对象一起在命名空间中构成一项 {name: object} 关联。所以命名空间是从名字到对象的一个映射(a mapping from name to objects) 。
@@ -370,7 +353,7 @@ dir(fibo)
 
 作用域的搜索顺序是：Local -> Enclosing -> Global -> Built-in
 
-```{python engine.path="D:/Project/Anaconda3/python.exe"}
+```{python}
 def scope_test():
     def do_local():
         spam = "local spam"
@@ -411,8 +394,7 @@ def outer():
 outer()
 # UnboundLocalError: local variable 'b' referenced before assignment
 ```
-Python解释器执行到 inner() 中的 print b 时，发现有个变量 b 在当前作用域(local)中
-无法找到该变量。它继续尝试把整块代码解释完。 b 是属于 inner() 作用域的。既然对变量 b 的赋值（声明）发生在 print 语句之后， print 语句执行时变量 b 是还未被声明的，于是抛出错误：变量在赋值前就被引用。在这个例子中，只有A语句没有B语句也会导致同样的结果。
+Python解释器执行到 inner() 中的 print b 时，发现有个变量 b，在当前作用域(local)中无法找到该变量。它继续尝试把整块代码解释完，b 是属于 inner() 作用域的，既然对变量 b 的赋值（声明）发生在 print 语句之后， print 语句执行时变量 b 是还未被声明的，于是抛出错误：变量在赋值前就被引用。在这个例子中，只有A语句没有B语句也会导致同样的结果。
 
 因为b没有被声明为非本地变量(nonlocal)，在inner()的局部空间中b是只读的（尝试写入b的赋值语句只会在最内层作用域中创建一个新的局部变量，而同名的外部变量保持不变）。
 
@@ -424,15 +406,16 @@ for 后面跟着的变量(target list)在循环结束后是不会被删除的，
 
 ### Python 面向对象
 
-#### 术语
+先有类型 (class)，再有对象(object)。Python 中的一切都是对象，包括类型。每个对象都有明确的类型。
+
+#### 术语简介
 
 - **类(Class):** 用来描述具有相同的属性和方法的对象的集合。它定义了该集合中每个对象所共有的属性和方法。对象是类的实例。
-- **类变量：**类变量在整个实例化的对象中是公用的。类变量定义在类中且在函数体之外。类变量通常不作为实例变量使用。
-- **数据成员：**类变量或者实例变量, 用于处理类及其实例对象的相关的数据。
+- **类变量：**类的所有实例共享的属性和方法。类变量定义在类中且在函数体之外。
 - **方法重写：**如果从父类继承的方法不能满足子类的需求，可以对其进行改写，这个过程叫方法的覆盖（override），也称为方法的重写。
 - **局部变量：**定义在方法中的变量，只作用于当前实例的类。
-- **实例变量：**在类的声明中，属性是用变量来表示的。这种变量就称为实例变量，是在类声明的内部但是在类的其他成员方法之外声明的。
-- **继承：**即一个派生类（derived class）继承基类（base class）的字段和方法。继承也允许把一个派生类的对象作为一个基类对象对待。例如，有这样一个设计：一个Dog类型的对象派生自Animal类，这是模拟"是一个（is-a）"关系（例图，Dog是一个Animal）。
+- **实例变量：**独属于每个实例的属性。
+- **继承：**即一个派生类（derived class）继承基类（base class）的字段和方法。继承也允许把一个派生类的对象作为一个基类对象对待。
 - **实例化：**创建一个类的实例，类的具体对象。
 - **方法：**类中定义的函数。
 - **对象：**通过类定义的数据结构实例。对象包括两个数据成员（类变量和实例变量）和方法。
@@ -453,23 +436,20 @@ class ClassName:
 
 类对象支持两种操作：属性引用和实例化。
 
-属性引用 使用 Python 中所有属性引用所使用的标准语法: obj.name。 有效的属性名称是类对象被创建时存在于类命名空间中的所有名称。 因此，如果类定义是这样的:
+类对象的属性引用使用 Python 中所有属性引用所使用的标准语法: obj.name。 有效的属性名称是类对象被创建时存在于类命名空间中的所有名称。 因此，如果类定义是这样的:
 
 ```{python}
 class MyClass:
     """A simple example class"""
     i = 12345
-
     def f(self):
         return 'hello world'
 ```
-那么 `MyClass.i` 和 `MyClass.f` 就是有效的属性引用，将分别返回一个整数和一个函数对象。 类属性也可以被赋值，因此可以通过赋值来更改 MyClass.i 的值。 `__doc__` 也是一个有效的属性，将返回所属类的文档字符串: "A simple example class"。
+那么 `MyClass.i` 和 `MyClass.f` 就是有效的属性引用，将分别返回一个整数和一个函数对象。 类属性也可以被赋值，因此可以通过赋值来更改 MyClass.i 的值。 `__doc__` 也是一个有效的属性，将返回所属类的文档字符串："A simple example class"。
 
-类的实例化使用函数表示法。 可以假装类对象就是会返回一个新的类实例的不带参数的函数。 举例来说（假设使用上述的类）: `x = MyClass()`。创建类的新实例并将此对象分配给局部变量`x`。
+类的实例化使用函数表示法，可以假装类对象就是会返回一个新的类实例的函数。 举例来说：`x = MyClass()`，将创建MyClass类的新实例并将此对象分配给局部变量`x`。
 
-当一个类定义了 `__init__()` 方法时，类的实例化操作会自动为新创建的类实例发起调用 `__init__()`，可以看成是初始化操作。 当创建了这个类的实例时就会调用该方法。
-
-当然，`__init__()` 方法还可以有额外参数以实现更高灵活性。在这种情况下，提供给类实例化运算符的参数将被传递给 `__init__()`。 例如：
+如果一个类定义了 `__init__()` 方法，创建了这个类的实例时就会调用该方法，可以看成是类实例的初始化操作。 当然，`__init__()` 方法还可以有额外参数以实现更高灵活性。在这种情况下，提供给类实例化运算符的参数将被传递给 `__init__()`。 例如：
 
 ```{python}
 class Complex:
@@ -481,9 +461,9 @@ x = Complex(3.0, -4.5)
 x.r, x.i
 ```
 
-#### 实例对象(Instance Objects)
+#### 实例对象
 
-实例对象理解的唯一操作是属性引用。有两种有效的属性名称，数据属性和方法。数据属性不需要声明；像局部变量一样，它们将在第一次被赋值时产生。另一类实例属性引用称为方法。 方法是*从属于*对象的函数。（在 Python中，方法这个术语并不是类实例所特有的，其他对象也可以有方法。）
+实例对象(Instance Objects)支持的唯一操作是属性引用。有效的属性名称有两种：数据属性和方法。数据属性不需要声明；像局部变量一样，它们将在第一次被赋值时产生。另一类实例属性是方法，方法是从属于对象的函数。（在 Python中，方法这个术语并不是类实例所特有的，其他对象也可以有方法。）
 
 #### 方法对象
 
@@ -502,11 +482,11 @@ MyClass.f()
 
 可以看到， `x.f()`没有报错，但 `MyClass.f()` 报错了。所以 `x.f` 与 `MyClass.f` 并不是一回事，它们是一个方法对象，一个是函数对象。
 
-方法的特殊之处就在于实例对象会作为函数的第一个参数被传入。 在我们的示例中，调用 x.f() 其实就相当于 MyClass.f(x)。总之，调用一个具有n个参数的方法就相当于调用n+1个参数的对应函数，增加的这个参数值为方法所属实例对象，位置在其他参数之前。
+方法的特殊之处就在于实例对象会作为函数的第一个参数被传入。 在我们的示例中，调用 x.f() 其实就相当于 MyClass.f(x)。总之，调用一个具有n个参数的实例方法就相当于调用n+1个参数的对应函数，增加的这个参数值就是方法所属的实例对象，位置在其他参数之前。
 
 #### 类和实例变量
 
-一般来说，实例变量是唯一属于每个实例的数据，而类变量则是类的所有实例共享的属性和方法:
+一般来说，实例变量(instance variable)是唯一属于每个实例的数据，而类变量(class variable)则是类的所有实例共享的属性和方法：
 ```{python}
 class Dog:
     kind = 'canine'         # class variable shared by all instances
@@ -553,16 +533,16 @@ print("Employee.__dict__:", Employee.__dict__)
 
 #### 补充说明
 
-数据属性会覆盖同名的方法属性，这在大型程序中可能带来极难发现的 bug。为了避免意外的命名冲突，使用一些约定来减少冲突的机会是明智的。可能的约定包括：方法属性名称的首字母大写，使用一个唯一的小写的字符串（也许只是一个下划线）作为数据属性名称的前缀，或者方法使用动词而数据属性使用名词。
+数据属性会覆盖同名的方法属性，这在大型程序中可能带来极难发现的 bug。为了避免意外的命名冲突，使用一些约定来减少冲突的几率是明智的。可能的约定包括：方法属性名称的首字母大写，数据属性名称的前缀使用一个唯一的小写的字符串（也许只是一个下划线），或者方法使用动词而数据属性使用名词。
 
-类的方法与普通的函数只有一个特别的区别——它们必须有一个额外的**第一个参数名称**，按照惯例它的名称是 `self`。这仅仅是一个约定：名字 `self` 对 Python 而言绝对没有任何特殊含义。但是请注意：如果不遵循这个约定，对其他的 Python 程序员而言你的代码可读性就会变差，而且有些类 *查看* 器程序也可能是遵循此约定编写的。
+类的方法与普通的函数只有一个特别的区别——它们必须有一个额外的**第一个参数名称**，按照惯例它的名称是 `self`。这仅仅是一个约定， `self` 对 Python 而言绝对没有任何特殊含义。但是如果不遵循这个约定，对其他的 Python 程序员而言你的代码可读性就会变差，而且有些类 查看器程序也可能是遵循此约定编写的。
 
 ```{python}
 class Test:
     def prt(self):
         print(self)
         print(self.__class__)
- 
+
 t = Test()
 t.prt()
 ```
@@ -583,7 +563,7 @@ class C:
     h = g
 ```
 
-现在 `f`、`g` 和 `h` 都是类 `C`中引用函数对象的属性，因此它们都是 `C` 的实例的方法 —— `h` 完全等同于 `g` 。请注意，这种做法通常只会使阅读程序的人产生困惑。
+现在 `f`、`g` 和 `h` 都是 `C`类中的函数对象，因此它们都是 `C` 的实例的方法 —— `h` 完全等同于 `g` 。请注意，这种做法通常只会使阅读程序的人产生困惑。
 
 方法可以通过使用 `self` 参数的方法属性，调用其他方法：
 
@@ -600,9 +580,7 @@ class Bag:
         self.add(x)
 ```
 
-方法可以像普通函数那样引用全局命名。与方法关联的全局作用域是包含这个方法的定义的模块（类）。（类本身永远不会作为全局作用域使用。）
-
-每个值都是一个对象，因此每个值都有一个*类*（也称它的*类型*），可以通过 `object.__class__` 查看。
+方法可以像普通函数那样引用全局命名。与方法关联的全局作用域是包含这个方法的定义的模块（类）。（类本身永远不会作为全局作用域使用）
 
 #### 类的继承
 
@@ -619,9 +597,9 @@ class DerivedClassName(BaseClassName):
 
 在python中继承中的一些特点：
 
-1. 如果在子类中需要父类的构造方法就需要显示的调用父类的构造方法，或者不重写父类的构造方法。详细说明可查看：[python 子类继承父类构造函数说明](http://www.runoob.com/w3cnote/python-extends-init.html)
-2. 在调用基类的方法时，需要加上基类的类名前缀，且需要带上 self 参数变量。区别在于类中调用普通函数时并不需要带上 self 参数
-3. Python 总是首先查找对应类型的方法，如果它不能在派生类中找到对应的方法，它才开始到基类中逐个查找。（先在本类中查找调用的方法，找不到才去基类中找）
+1. 如果在子类中需要父类的构造方法就需要显示的调用父类的构造方法，或者不重写父类的构造方法。详细说明可查看：[Python 子类继承父类构造函数说明](http://www.runoob.com/w3cnote/python-extends-init.html)。
+2. 在调用基类的方法时，需要加上基类的类名前缀，且需要带上 self 参数变量。区别在于类中调用普通函数时并不需要带上 self 参数。
+3. Python 总是首先查找对应类型的方法，如果它不能在派生类中找到对应的方法，它才开始到基类中逐个查找。
 
 如果在继承元组中列了一个以上的类，那么它就被称作"多重继承" 。
 
@@ -685,7 +663,7 @@ Python中并不存在所谓只能在对象内部才能访问的“私有”实�
 
 由于存在一种合理的类私有成员使用场景（例如为了避免名称与子类所定义名称的冲突），Python 对这种机制提供了简单的支持，即所谓“名称重整” （*name mangling*）。`__spam` 形式的任何标识符（前面至少两个下划线，后面至多一个下划线）将被替换为 `_classname__spam`，其中 `classname` 为去除了前缀下划线的当前类名称。这种替换不考虑标识符的句法位置，只要它出现在类的定义内就会进行。
 
-Name mangling 有利于子类重写父类的方法而不会破坏类内部的方法调用
+名称重整有利于子类重写父类的方法而不会破坏类内部的方法调用
 ```python
 class Mapping:
     def __init__(self, iterable):
@@ -731,6 +709,87 @@ it
 next(it),next(it),next(it)
 ```
 
+#### 元类
+
+在Python中，类也是对象（Classes are objects）。
+```{python}
+class ObjectCreator:
+    pass
+```
+
+会在内存中创造一个名为`ObjectCreator`的类对象。这个类对象具备创造对象的能力，同时它本身也是一个对象。它可以被赋值给别的变量，可以被复制，可以给它添加属性，可以作为函数参数传递。
+```{python}
+print(ObjectCreator)
+def echo(o):
+  print(o)
+echo(ObjectCreator)
+hasattr(ObjectCreator, 'new_attr')
+ObjectCreator.new_attr = 'foo'
+hasattr(ObjectCreator, 'new_attr')
+ObjectCreator.new_attr
+ObjectCreatorMirror = ObjectCreator
+print(ObjectCreatorMirror())
+```
+
+因为类是对象，所以你可以想对象一样动态地创建它们。
+
+```{python}
+def choose_class(name):
+    if name == "foo":
+      class Foo:
+        pass
+      return Foo
+    else:
+      class Bar:
+        pass
+      return Bar
+
+myclass = choose_class('foo')
+print(myclass)
+print(myclass())
+```
+
+因为类是对象，所以肯定可以由某些东西来创建。一种是使用关键词`class`，另一种是使用`type`函数手动创建。`type`函数常见的作用是查看对象的类型（type）。
+
+```{python}
+type(1)
+type('1')
+type(ObjectCreator)
+type(ObjectCreator())
+```
+`type`可以按照以下方式定义类：
+
+```
+type(name of the class,
+     tuple of the parent class (for inheritance, can be empty),
+     dictionary containing attributes names and values)
+```
+
+比如：
+
+```{python}
+MyShinyClass = type('MyShinyClass', (), {})
+print(MyShinyClass)
+print(MyShinyClass())
+Foo = type('Foo', (MyShinyClass,), {'bar':True}) #inherit from MyShinyClass
+Foo.bar
+```
+元类是创建类的类。`type`就是Python中的元类。
+
+```{python}
+age = 35
+age.__class__
+name = 'bob'
+name.__class__
+def foo(): pass
+foo.__class__
+class bar: pass
+bar.__class__
+# then
+age.__class__.__class__
+name.__class__.__class__
+foo.__class__.__class__
+```
 
 参考资料：
 
@@ -740,4 +799,5 @@ next(it),next(it),next(it)
 - [一篇文章搞懂Python中的面向对象编程](http://yangcongchufang.com/%E9%AB%98%E7%BA%A7python%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/python-object-class.html)
 - [Python3 迭代器与生成器](http://www.runoob.com/python3/python3-iterator-generator.html)
 - [一篇文章搞懂Python中的函数式编程](http://yangcongchufang.com/%E9%AB%98%E7%BA%A7python%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/python-functional.html)
+- [What are metaclasses in Python ?](https://stackoverflow.com/questions/100003/what-are-metaclasses-in-python/6581949#6581949)
 
