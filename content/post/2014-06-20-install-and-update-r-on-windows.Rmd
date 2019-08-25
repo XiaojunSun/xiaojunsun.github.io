@@ -19,25 +19,25 @@ The latest version of R can be download from [CRAN][2]. Rstudio Desktop can be d
 
 You should set up a folder named `R` at the directory where you want to install R in. The path should look like `G:\Program Files\R\R-3.1.0` which is shown in the graph below.
 
-![installR01](http://i.imgbox.com/IRTRIvg5.jpg "Choose directory to install R")
+![](http://i.imgbox.com/IRTRIvg5.jpg "Choose directory to install R")
 
 Choose according to you PC operation system.
 
-![installR02](http://i.imgbox.com/fo9YGrzg.jpg "Choose according to you PC system")
+![](http://i.imgbox.com/fo9YGrzg.jpg "Choose according to you PC system")
 
 If you install it successfully, you open R and will see this:
 
-![installR03](http://i.imgbox.com/5aw3DW4B.jpg "R on windows") 
+![](http://i.imgbox.com/5aw3DW4B.jpg "R on windows") 
 
 ### Install Rstudio Desktop
 
 Choose directory to install Rstudio.
 
-![installRstudion1](http://i.imgbox.com/exN40Tst.jpg)
+![](http://i.imgbox.com/exN40Tst.jpg)
 
 Open Rstudio you will see this.
 
-![installRstudion2](http://i.imgbox.com/W5BWO12s.jpg)
+![](http://i.imgbox.com/W5BWO12s.jpg)
 
 
 ## Step 2: Upgrade R
@@ -54,7 +54,7 @@ Old.R.RunMe()
 ```
 
 
-![oldr](http://i.imgbox.com/yn5SmnIH.jpg)
+![](http://i.imgbox.com/yn5SmnIH.jpg)
 
 It will ask you whether or not to quit R. Just type `n` and hit `ENTER`. Then run `New.R.RunMe()` just the same way.
 

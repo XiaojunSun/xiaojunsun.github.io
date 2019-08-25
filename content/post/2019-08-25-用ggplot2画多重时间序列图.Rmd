@@ -1,0 +1,83 @@
+---
+title: 用ggplot2画多条时间序列图
+author: Xiaojun Sun
+date: '2019-08-25'
+categories:
+  - Notes
+tags:
+  - R
+slug: ggplot2-draw-multi-ts-plot
+---
+
+# 情形1
+
+有四只股票，在相同的时间区间内，每只股票有四个模型的估值结果。要分不同的股票分别进行绘制。每个模型要使用不同的图例进行展示。
+
+## 载入程序包
+```{r warning=FALSE}
+library(lubridate)
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+```
+
+## 准备数据
+```{r}
+x <- runif(120)
+dt <- data.frame(date = rep(today()-days(30:1), 4), 
+                 stock = sort(rep(c("Stock1", "Stock2", "Stock3", "Stock4"),30)),
+                 line1 = x-rnorm(120)-2, 
+                 line2 = x+rnorm(120)+2, 
+                 line3 = x-0.5*rnorm(120)-1, 
+                 line4 = x+0.5*rnorm(120)+1)
+```
+
+## 作图
+```{r}
+g <- melt(dt, id.vars = c('date','stock'), variable.name = "line_name") %>%
+  ggplot(aes(x = date, y = value, color = line_name)) + geom_line(aes(linetype = line_name), size = 1)
+```
+
+```{r}
+g1 <- g + facet_wrap(~ stock, ncol = 2, scales = "free_y") +
+  labs(x = '日期', y = '价格') +
+  theme_bw() +
+  scale_colour_brewer(
+    name = "",
+    labels = c("模型1", "模型2", "模型3", "模型4"),
+    palette = "Set1"
+  ) +
+  scale_linetype_discrete(name = "",
+                          labels = c("模型1", "模型2", "模型3", "模型4")) + theme(legend.position = "bottom")
+
+g1 
+```
+
+# 情形2
+
+有一只股票，在相同的时间区间内有四个模型的估值结果。要分不同的模型分别进行绘制。
+
+## 准备数据
+```{r}
+x <- runif(120)
+dt <- data.frame(date = today()-days(30:1), 
+                 line1 = x-rnorm(120)-2, 
+                 line2 = x+rnorm(120)+2, 
+                 line3 = x-0.5*rnorm(120)-1, 
+                 line4 = x+0.5*rnorm(120)+1)
+```
+
+## 作图
+```{r}
+g <- melt(dt, id.vars = 'date', variable.name = "line_name") %>%
+  ggplot(aes(x = date, y = value, color = line_name)) + geom_line(aes(linetype = line_name), size = 1)
+```
+
+```{r}
+g1 <- g + facet_wrap(~ line_name, ncol = 2, scales = "free_y", labeller = labeller(line_name = c(line1 = "模型1", line2 = "模型2", line3 = "模型3", line4 = "模型4"))) +
+  labs(x = '日期', y = '价格') +
+  theme_bw() +
+  theme(legend.position = "none")
+
+g1 
+```
