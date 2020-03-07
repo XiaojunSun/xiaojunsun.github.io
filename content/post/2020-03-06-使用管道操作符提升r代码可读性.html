@@ -1,0 +1,245 @@
+---
+title: 使用管道操作符提升R代码可读性
+author: Xiaojun Sun
+date: '2020-03-06'
+slug: use-pipe-operator
+categories:
+  - Notes
+tags:
+  - R
+  - Packages
+---
+
+
+
+<p>管道操作符的功能是把前一个函数的结果作为参数传递给下一个函数。管道操作符可以将多个操作串联到一起，避免使用嵌套函数或者中间变量，使代码逻辑保持顺畅和简约。</p>
+<pre class="r"><code>library(pipeR)
+library(dplyr)</code></pre>
+<pre><code>## Warning: 程辑包&#39;dplyr&#39;是用R版本3.6.3 来建造的</code></pre>
+<pre class="r"><code>library(data.table)</code></pre>
+<div id="piper-package" class="section level1">
+<h1>pipeR package</h1>
+<p>pipeR 提供 <code>%&gt;&gt;%</code> 管道操作符，</p>
+<div id="传递到第一个参数" class="section level2">
+<h2>传递到第一个参数</h2>
+<pre class="r"><code>set.seed(100)
+rnorm(100, mean = 10)%&gt;&gt;%
+  log%&gt;&gt;%
+  diff%&gt;&gt;%
+  sample(size = 10000, replace = TRUE)%&gt;&gt;%
+  summary()</code></pre>
+<pre><code>##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+## -0.4314657 -0.1028125  0.0005268  0.0013830  0.0975792  0.3512580</code></pre>
+</div>
+<div id="传递到位" class="section level2">
+<h2>传递到<code>·</code>位</h2>
+<p>在这种情况下，你需要先将表达式用<code>{}</code>或者<code>()</code>括起来。</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  {lm(mpg ~ cyl + wt, data = .)} </code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ cyl + wt, data = .)
+## 
+## Coefficients:
+## (Intercept)          cyl           wt  
+##      39.686       -1.508       -3.191</code></pre>
+<p>或者：</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  (lm(mpg ~ cyl + wt, data = .))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ cyl + wt, data = .)
+## 
+## Coefficients:
+## (Intercept)          cyl           wt  
+##      39.686       -1.508       -3.191</code></pre>
+<p><code>{}</code>与<code>()</code>的区别在于，<code>{}</code>可以接受一组表达式，结果由最后一个表达式决定；<code>()</code>只能接受一个表达式。</p>
+<pre class="r"><code>mtcars %&gt;&gt;% {
+  model &lt;- lm(mpg ~ wt + cyl, data = .)
+  summ &lt;- summary(model)
+  summ[c(&quot;r.squared&quot;,&quot;adj.r.squared&quot;)]
+}</code></pre>
+<pre><code>## $r.squared
+## [1] 0.8302274
+## 
+## $adj.r.squared
+## [1] 0.8185189</code></pre>
+</div>
+<div id="使用表达式传递" class="section level2">
+<h2>使用表达式传递</h2>
+<p>表达式使用在<code>.</code>会产生歧义的地方。</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  (lm(mpg ~ ., data = .))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ ., data = .)
+## 
+## Coefficients:
+## (Intercept)          cyl         disp           hp         drat           wt  
+##    12.30337     -0.11144      0.01334     -0.02148      0.78711     -3.71530  
+##        qsec           vs           am         gear         carb  
+##     0.82104      0.31776      2.52023      0.65541     -0.19942</code></pre>
+<p>可以改为：</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  (df ~ lm(mpg ~ ., data = df))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ ., data = df)
+## 
+## Coefficients:
+## (Intercept)          cyl         disp           hp         drat           wt  
+##    12.30337     -0.11144      0.01334     -0.02148      0.78711     -3.71530  
+##        qsec           vs           am         gear         carb  
+##     0.82104      0.31776      2.52023      0.65541     -0.19942</code></pre>
+<p>需要注意一定要使用<code>()</code>。<code>~</code>后可以跟一组表达式，用<code>{}</code>括起来。</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  subset(select = c(mpg, wt, cyl)) %&gt;&gt;%
+  (x ~ {
+    summ &lt;- lm(mpg ~ ., data = x) %&gt;&gt;%
+      summary
+    list(n = nrow(x), r.squared = summ$r.squared)
+  })</code></pre>
+<pre><code>## $n
+## [1] 32
+## 
+## $r.squared
+## [1] 0.8302274</code></pre>
+<div id="产生副作用" class="section level3">
+<h3>产生副作用</h3>
+<p>在管道参数传递过程中，有时候会需要使用输出一些中间结果，比如plot() 或 cat()。<code>~</code>右侧的单边表达式，会产生副作用，但不是影响参数传递。</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  subset(mpg &gt;= quantile(mpg, 0.05) &amp; mpg &lt;= quantile(mpg, 0.95),
+    c(mpg, cyl, wt)) %&gt;&gt;%
+  (~ cat(&quot;rows:&quot;,nrow(.),&quot;\n&quot;)) %&gt;&gt;%   # cat() returns NULL
+  summary</code></pre>
+<pre><code>## rows: 28</code></pre>
+<pre><code>##       mpg             cyl              wt       
+##  Min.   :13.30   Min.   :4.000   Min.   :1.513  
+##  1st Qu.:15.72   1st Qu.:4.000   1st Qu.:2.732  
+##  Median :19.20   Median :6.000   Median :3.325  
+##  Mean   :19.85   Mean   :6.214   Mean   :3.152  
+##  3rd Qu.:21.82   3rd Qu.:8.000   3rd Qu.:3.570  
+##  Max.   :30.40   Max.   :8.000   Max.   :5.345</code></pre>
+<p>管道操作符中间可以输出文本，但并不常用。</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  &quot;Running linear model&quot; %&gt;&gt;%
+  lm(formula = mpg ~ wt + cyl) %&gt;&gt;%
+  &quot;Summarizing the model&quot; %&gt;&gt;%
+  summary %&gt;&gt;%
+  coef</code></pre>
+<pre><code>## Running linear model 
+## Summarizing the model</code></pre>
+<pre><code>##              Estimate Std. Error   t value     Pr(&gt;|t|)
+## (Intercept) 39.686261  1.7149840 23.140893 3.043182e-20
+## wt          -3.190972  0.7569065 -4.215808 2.220200e-04
+## cyl         -1.507795  0.4146883 -3.635972 1.064282e-03</code></pre>
+<p>还可以使用<code>?</code>打印出中间值。</p>
+<pre class="r"><code>mtcars %&gt;&gt;% 
+  subset(vs == 1, c(mpg, cyl, wt)) %&gt;&gt;%
+  (? nrow(.)) %&gt;&gt;%
+  (? data ~ ncol(data)) %&gt;&gt;%
+  summary</code></pre>
+<pre><code>## ? nrow(.)
+## [1] 14
+## ? data ~ ncol(data)
+## [1] 3</code></pre>
+<pre><code>##       mpg             cyl              wt       
+##  Min.   :17.80   Min.   :4.000   Min.   :1.513  
+##  1st Qu.:21.40   1st Qu.:4.000   1st Qu.:2.001  
+##  Median :22.80   Median :4.000   Median :2.623  
+##  Mean   :24.56   Mean   :4.571   Mean   :2.611  
+##  3rd Qu.:29.62   3rd Qu.:5.500   3rd Qu.:3.209  
+##  Max.   :33.90   Max.   :6.000   Max.   :3.460</code></pre>
+<p>一般情况下，副作用不会对整个流程产生影响，但是使用<code>stopifnot(...)</code>可以在一定条件下，让流程终止。</p>
+<pre class="r"><code>mtcars %&gt;&gt;% 
+  subset(vs == 1, c(mpg, cyl, wt)) %&gt;&gt;%
+  lm(formula = mpg ~ cyl + wt) %&gt;&gt;%
+  (~ stopifnot(summary(.)$r.squared &gt;= 0.5)) %&gt;&gt;%
+  predict(newdata = list(cyl = 4.5, wt  = 3.0))</code></pre>
+<pre><code>##        1 
+## 22.34311</code></pre>
+<p>使用<code>browser()</code>还能实现在流程中debug的目的。</p>
+<pre class="r"><code>mtcars %&gt;&gt;% 
+  subset(vs == 1, c(mpg, cyl, wt)) %&gt;&gt;%
+  (~ browser()) %&gt;&gt;%
+  lm(formula = mpg ~ cyl + wt) %&gt;&gt;%
+  summary</code></pre>
+<pre><code>## Called from: eval(expr, eval_envir)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ cyl + wt, data = .)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.2726 -1.4219 -0.4623  1.2011  5.0869 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  42.6573     4.1753   10.22 5.97e-07 ***
+## cyl          -0.6388     1.2776   -0.50  0.62690    
+## wt           -5.8132     1.6753   -3.47  0.00524 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.025 on 11 degrees of freedom
+## Multiple R-squared:  0.7323, Adjusted R-squared:  0.6837 
+## F-statistic: 15.05 on 2 and 11 DF,  p-value: 0.000711</code></pre>
+<p>流程会在<code>browser()</code>处暂停下来，并进入动态debug模式。<code>browser()</code>还支持限制进入debug模式的条件，eg. <code>browser(expr = .$r.squared &lt; 0.8)</code>。</p>
+<pre><code>Called from: eval(expr, envir, enclos)
+Browse[1]&gt; head(.)
+                mpg cyl    wt
+Datsun 710     22.8   4 2.320
+Hornet 4 Drive 21.4   6 3.215
+Valiant        18.1   6 3.460
+Merc 240D      24.4   4 3.190
+Merc 230       22.8   4 3.150
+Merc 280       19.2   6 3.440
+Browse[1]&gt;</code></pre>
+</div>
+<div id="在传递过程中赋值" class="section level3">
+<h3>在传递过程中赋值</h3>
+<p>有三种情形：
+1. <code>(~ symbol)</code>，直接赋值给symbol；
+2. <code>(~ symbol = expression)</code>，加工后赋值给symbol；
+3. <code>(symbol = expression)</code>，仅赋值，不往下传递参数。</p>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  subset(select = c(mpg, wt, cyl)) %&gt;&gt;%
+  (~ subdata)%&gt;&gt;%
+  (~ summ = df ~ summary(df)) %&gt;&gt;%  # side-effect assignment
+  (model = lm(mpg ~ wt + cyl, data = .)) # pipe and assign
+model</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt + cyl, data = .)
+## 
+## Coefficients:
+## (Intercept)           wt          cyl  
+##      39.686       -3.191       -1.508</code></pre>
+</div>
+<div id="提取元素" class="section level3">
+<h3>提取元素</h3>
+<p><code>x %&gt;&gt;% (y)</code>可以从x中提取元素y。</p>
+<pre class="r"><code>list(a=1,b=2) %&gt;&gt;% (a) # list(a=1,b=2)[[&quot;a&quot;]]</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>mtcars %&gt;&gt;%
+  (lm(mpg ~ wt + cyl, data = .)) %&gt;&gt;%
+  summary %&gt;&gt;%
+  (r.squared)</code></pre>
+<pre><code>## [1] 0.8302274</code></pre>
+</div>
+<div id="例子" class="section level3">
+<h3>例子</h3>
+<pre class="r"><code>library(hflights)
+hflights %&gt;&gt;% 
+  filter(Cancelled == 0) %&gt;&gt;%
+  mutate(speed = Distance / ActualElapsedTime) %&gt;&gt;%
+  (~ hflights2) %&gt;&gt;% # save to hflights2
+  group_by(UniqueCarrier) %&gt;&gt;%
+  summarize(mean_speed = mean(speed,na.rm = TRUE)) %&gt;&gt;%
+  arrange(desc(mean_speed)) %&gt;&gt;%
+  with(barplot(mean_speed,names.arg = UniqueCarrier,
+    main = &quot;Average flight speed&quot;))</code></pre>
+<p><img src="/post/2020-03-06-使用管道操作符提升r代码可读性_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+</div>
+</div>
