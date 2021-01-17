@@ -219,7 +219,7 @@ $$
 
 ## 生成图片
 
-You can also embed plots. See Figure \@ref(fig:pie) for example:
+通过R语言生成图片，并通过`\@ref(fig:pie)`进行引用，eg. \@ref(fig:pie) :
 
 ```{r pie, fig.cap='A fancy pie chart.', tidy=FALSE}
 par(mar = c(0, 1, 0, 1))
