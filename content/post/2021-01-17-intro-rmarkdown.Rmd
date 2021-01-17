@@ -17,8 +17,9 @@ output:
 
 - 数学公式：[Katex](https://katex.org/docs/supported.html)
 - 表格工具：[Table generator](https://www.tablesgenerator.com/)
-- emoji表情：[emoji cheatsheet](https://www.webfx.com/tools/emoji-cheat-sheet/).
+- emoji表情：[emoji cheatsheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
 - 流程图：[draw.io](https://app.diagrams.net/)
+- 数学绘图：[geogebra](https://geogebra.kz16.top/)
 
 # 区块元素
 ## 段落
