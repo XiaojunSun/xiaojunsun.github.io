@@ -1,0 +1,233 @@
+---
+title: RMarkdown学习教程
+author: Xiaojun Sun
+date: '2021-01-17'
+categories:
+  - Notes
+tags:
+  - Markdown
+  - R
+slug: intro-rmarkdown
+output: 
+  html_document: 
+    toc: yes
+---
+
+
+
+<div id="常用工具" class="section level1">
+<h1>常用工具</h1>
+<ul>
+<li>数学公式：<a href="https://katex.org/docs/supported.html">Katex</a></li>
+<li>表格工具：<a href="https://www.tablesgenerator.com/">Table generator</a></li>
+<li>emoji表情：<a href="https://www.webfx.com/tools/emoji-cheat-sheet/">emoji cheatsheet</a>.</li>
+<li>流程图：<a href="https://app.diagrams.net/">draw.io</a></li>
+</ul>
+</div>
+<div id="区块元素" class="section level1">
+<h1>区块元素</h1>
+<div id="段落" class="section level2">
+<h2>段落</h2>
+<p>一般使用一个空行，或者两个段尾空格来分段，也可以插入<code>&lt;br/&gt;</code>来分段。如果只是按<code>Enter</code>则无法分段。</p>
+</div>
+<div id="标题" class="section level2">
+<h2>标题</h2>
+<p>以1到6个<code>#</code>加上文字，就可以创建标题，对应1到6级标题。</p>
+<pre><code># This is an H1
+
+## This is an H2
+
+###### This is an H6</code></pre>
+</div>
+<div id="引用" class="section level2">
+<h2>引用</h2>
+<p>用<code>&gt;</code>可以创建引用样式。比如：</p>
+<blockquote>
+<p>西蒙·波伏娃，出生于巴黎一个天主教色彩很深的资产阶级家庭。她具有作家，哲学家、散文家、戏剧家等多重身份，是成为存在主义代表性的人物，女权运动的先驱，主要作品有《西蒙·波伏娃的美国纪行》、《满大人》、《老年》、《第二性》等。
+&gt; 这是嵌套引用</p>
+</blockquote>
+</div>
+<div id="列表" class="section level2">
+<h2>列表</h2>
+<pre class="markdown"><code>## un-ordered list
+*   Red
+*   Green
+*   Blue
+
+## ordered list
+1.  Red
+2.  Green
+3.  Blue</code></pre>
+<p>实现效果如下：</p>
+</div>
+<div id="un-ordered-list" class="section level2">
+<h2>un-ordered list</h2>
+<ul>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ul>
+</div>
+<div id="ordered-list" class="section level2">
+<h2>ordered list</h2>
+<ol style="list-style-type: decimal">
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ol>
+</div>
+<div id="任务" class="section level2">
+<h2>任务</h2>
+<p>用 [ ] 或 [x] 可以任务清单。</p>
+<pre class="markdown"><code>- [ ] a task list item
+- [ ] list syntax required
+- [ ] normal **formatting**, @mentions, #1234 refs
+- [ ] incomplete
+- [x] completed</code></pre>
+<p>实现效果如下：</p>
+<ul>
+<li><input type="checkbox" disabled="" />
+a task list item</li>
+<li><input type="checkbox" disabled="" />
+list syntax required</li>
+<li><input type="checkbox" disabled="" />
+normal <strong>formatting</strong>, <span class="citation">@mentions</span>, #1234 refs</li>
+<li><input type="checkbox" disabled="" />
+incomplete</li>
+<li><input type="checkbox" disabled="" checked="" />
+completed</li>
+</ul>
+</div>
+<div id="代码块" class="section level2">
+<h2>代码块</h2>
+<p>用成对的三个`可以创建代码块，代码要放在中间。</p>
+<pre class="python"><code>def my_function(x, y, z=1.5):
+    if z &gt; 1:
+        return z * (x + y)
+    else:
+        return z / (x + y)</code></pre>
+</div>
+<div id="数学公式" class="section level2">
+<h2>数学公式</h2>
+<pre><code>$$
+\begin{alignedat}{2}
+   10&amp;x+ &amp;3&amp;y = 2 \\
+   3&amp;x+&amp;13&amp;y = 4
+\end{alignedat}
+$$</code></pre>
+<p>实现效果如下：</p>
+<p><span class="math display">\[
+\begin{alignedat}{2}
+   10&amp;x+ &amp;3&amp;y = 2 \\
+   3&amp;x+&amp;13&amp;y = 4
+\end{alignedat}
+\]</span>
+行内公式也支持 <span class="math inline">\(y=\textstyle\sum_{i=1}^n x\)</span>。</p>
+</div>
+<div id="表格" class="section level2">
+<h2>表格</h2>
+<pre><code>| Left-Aligned  | Center Aligned  | Right Aligned |
+| :------------ |:---------------:| -----:|
+| col 3 is      | some wordy text | $1600 |
+| col 2 is      | centered        |   $12 |
+| zebra stripes | are neat        |    $1 |</code></pre>
+<p>实现效果如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Left-Aligned</th>
+<th align="center">Center Aligned</th>
+<th align="right">Right Aligned</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">col 3 is</td>
+<td align="center">some wordy text</td>
+<td align="right">$1600</td>
+</tr>
+<tr class="even">
+<td align="left">col 2 is</td>
+<td align="center">centered</td>
+<td align="right">$12</td>
+</tr>
+<tr class="odd">
+<td align="left">zebra stripes</td>
+<td align="center">are neat</td>
+<td align="right">$1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="脚注" class="section level2">
+<h2>脚注</h2>
+<pre><code>可以像这样插入脚注[^注1].
+
+[^注1]: Here is the *text* of the **footnote**.</code></pre>
+<p>实现效果如下：</p>
+<p>可以像这样插入脚注<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+</div>
+<div id="横线分割线" class="section level2">
+<h2>横线分割线</h2>
+<p>*** 或 —可以创建横线分割线。实现效果如下：</p>
+<hr />
+</div>
+<div id="插入html元素" class="section level2">
+<h2>插入html元素</h2>
+<p>比如B站视频：</p>
+<iframe src="//player.bilibili.com/player.html?aid=60046431&amp;bvid=BV18t411E7GZ&amp;cid=104568723&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+</iframe>
+</div>
+</div>
+<div id="段内元素" class="section level1">
+<h1>段内元素</h1>
+<div id="网页链接" class="section level2">
+<h2>网页链接</h2>
+<pre><code>这是一个[样例链接](http://example.com/)。</code></pre>
+<p>实现效果如下：这是一个<a href="http://example.com/">样例链接</a>。</p>
+</div>
+<div id="内部链接" class="section level2">
+<h2>内部链接</h2>
+<p><code>跳转到[常用工具](#常用工具)</code></p>
+<p>实现效果如下：跳转到<a href="#常用工具">常用工具</a></p>
+</div>
+<div id="urls" class="section level2">
+<h2>URLs</h2>
+<p>用<链接>直接插入URL链接<a href="https://www.google.com.hk/" class="uri">https://www.google.com.hk/</a>。</p>
+</div>
+<div id="图片" class="section level2">
+<h2>图片</h2>
+<p>用以下两种样式插入图片：</p>
+<pre><code>![Alt text](/path/to/img.jpg)
+
+![Alt text](/path/to/img.jpg &quot;Optional title&quot;)</code></pre>
+<p><img src="http://i.imgbox.com/5aw3DW4B.jpg" title="R on windows" /></p>
+</div>
+<div id="强调" class="section level2">
+<h2>强调</h2>
+<pre><code>&lt;kbd&gt;Esc&lt;/kbd&gt;
+*斜体文本1*   _斜体文本2_ 
+**粗体文本1**  __粗体文本2__ 
+***粗斜体文本1***  ___粗斜体文本2___
+&lt;u&gt;下划线文本&lt;/u&gt;  ~~删除线文本~~
+变为&lt;font color=&quot;red&quot;&gt;红&lt;/font&gt;色</code></pre>
+<p>实现效果如下：</p>
+<p><kbd>Esc</kbd></p>
+<p><em>斜体文本1</em> <em>斜体文本2</em></p>
+<p><strong>粗体文本1</strong> <strong>粗体文本2</strong></p>
+<p><strong><em>粗斜体文本1</em></strong> <strong><em>粗斜体文本2</em></strong></p>
+<p><u>下划线文本</u> <del>删除线文本</del></p>
+<p>变为<font color="red">红</font>色</p>
+</div>
+<div id="emoji表情" class="section level2">
+<h2>Emoji表情</h2>
+<p>用一对:包围，参考<a href="https://www.webfx.com/tools/emoji-cheat-sheet/">官网</a>格式即可插入表情。</p>
+<p>:gift_heart: :tea:</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>这里是<em>脚注</em>的<strong>内容</strong>。<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

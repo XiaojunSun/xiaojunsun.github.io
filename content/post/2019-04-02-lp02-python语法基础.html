@@ -12,10 +12,10 @@ output: html_document
 
 
 
-<p>以下内容主要参考<a href="https://www.jianshu.com/p/04d180d90a3f">《利用Python进行数据分析·第2版》</a>和<a href="https://docs.python.org/3/tutorial/index.html">Python官方文档 3.7.3</a></p>
-<div id="section" class="section level3">
+<p>以下内容主要参考<a href="https://www.jianshu.com/p/04d180d90a3f">《利用Python进行数据分析·第2版》</a>和<a href="https://docs.python.org/3.7/tutorial/index.html">Python官方文档 3.7.3</a></p>
+<div id="控制流" class="section level3">
 <h3>控制流</h3>
-<div id="if" class="section level4">
+<div id="if语句" class="section level4">
 <h4>if语句</h4>
 <p>Python中if语句的一般形式如下所示：</p>
 <pre class="python"><code>if condition_1:
@@ -31,7 +31,7 @@ else:
 <li>在Python中没有switch – case语句。</li>
 </ul>
 </div>
-<div id="for" class="section level4">
+<div id="for循环" class="section level4">
 <h4>for循环</h4>
 <p>for循环是在一个集合（列表或元组）中进行迭代。可以用<code>break</code>跳出for循环。</p>
 <pre class="python"><code>sequence = [1, 2, None, 4, None, 10]
@@ -61,7 +61,7 @@ total</code></pre>
     words.insert(0, w)</code></pre>
 <p>如果写成 <code>for w in words:</code>，这个示例就会创建无限长的列表。</p>
 </div>
-<div id="while" class="section level4">
+<div id="while循环" class="section level4">
 <h4>while循环</h4>
 <pre class="python"><code>x = 256; total = 0
 while x &gt; 0:
@@ -105,7 +105,7 @@ else:
 ## 3
 ## 4</code></pre>
 </div>
-<div id="section-1" class="section level4">
+<div id="三元表达式" class="section level4">
 <h4>三元表达式</h4>
 <p>Python中的三元表达式可以将if-else语句放到一行里。</p>
 <pre class="python"><code>value = true-expr if condition else false-expr</code></pre>
@@ -116,9 +116,9 @@ x</code></pre>
 <pre><code>## 100</code></pre>
 </div>
 </div>
-<div id="section-2" class="section level3">
+<div id="文件和操作系统" class="section level3">
 <h3>文件和操作系统</h3>
-<div id="section-3" class="section level4">
+<div id="文件的读写和关闭" class="section level4">
 <h4>文件的读写和关闭</h4>
 <pre class="python"><code>f=open(&#39;somefile.txt&#39;)
 f.readline()#表示读文件的一行
@@ -133,7 +133,7 @@ f.write()#表示把字符串写入
 f.writelines()#表示把一个列表写入</code></pre>
 <p><img src="https://ww1.sinaimg.cn/large/748b26cfly1g1nicb5l0nj20jg069dhg.jpg" /></p>
 </div>
-<div id="os" class="section level4">
+<div id="os模块" class="section level4">
 <h4>os模块</h4>
 <p><a href="https://python101.pythonlibrary.org/chapter16_os.html">os模块</a>提供了一种方便的使用操作系统函数的方法。</p>
 <pre class="python"><code>import os
@@ -172,7 +172,7 @@ print os.path.isdir(&#39;test01&#39;)
 #判断文件或者目录是否存在
 print os.path.exists(&#39;demo_file.py&#39;)</code></pre>
 </div>
-<div id="is--" class="section level4">
+<div id="is-和-的区别" class="section level4">
 <h4><code>is</code> 和 <code>==</code> 的区别</h4>
 <p>先来看几个例子：</p>
 <pre class="python"><code>a = &quot;hello&quot;
@@ -198,7 +198,7 @@ print(a == b)  # 输出 True </code></pre>
 <p>一般情况下，如果 a is b 返回True的话，即 a 和 b 指向同一块内存地址的话，a == b 也返回True，即 a 和 b 的值也相等。只要 a 和 b 的值相等，a == b 就会返回True，而只有 id(a) 和 id(b) 相等时，a is b 才返回 True。</p>
 </div>
 </div>
-<div id="section-4" class="section level3">
+<div id="模块" class="section level3">
 <h3>模块</h3>
 <p>模块是一个包含Python定义和声明的文件。文件名就是模块名后跟文件后缀 .py 。在一个模块内部，模块名（作为一个字符串）可以通过全局变量 <code>__name__</code> 的值获得。例如，使用在当前目录下创建一个名为 fibo.py 的文件， 文件中含有以下内容：</p>
 <pre class="python"><code># fibo.py
@@ -231,7 +231,7 @@ fibo.__name__  #&#39;fibo&#39;</code></pre>
 <p>一般情况下不建议使用<code>from fibo import *</code>这种导入方式，因为它会引入一系列未知的名称到解释器中，这很可能覆盖你已经定义的一些东西。</p>
 <p>使用<code>as</code>关键词，你可以给导入的名称重命名：</p>
 <pre class="python"><code>from fibo import fib as fun1, fib2 as fun2</code></pre>
-<div id="section-5" class="section level4">
+<div id="以脚本的方式执行模块" class="section level4">
 <h4>以脚本的方式执行模块</h4>
 <p>一个 Python 源码文件除了可以被直接运行外，还可以作为模块（也就是库）被导入。不管是导入还是直接运行，最顶层的代码都会被运行（Python 用缩进来区分代码层次）。</p>
 <p>在命令行窗口中，可以使用<code>python fibo.py &lt;arguments&gt;</code>执行模块里的代码。在IPython中，可以使用<code>%run fibo.py &lt;arguments&gt;</code>执行模块里的代码，这同时会将模块中定义的函数导入当前符号表中。</p>
@@ -244,13 +244,13 @@ fibo.__name__  #&#39;fibo&#39;</code></pre>
 <p>简单的理解就是： 如果模块是被直接运行的，则代码块被运行，如果模块是被导入的，则代码块不被运行。<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>对软件包来说，通过加入 <code>__main__.py</code> 模块可以达到同样的效果，当使用 <code>-m</code> 运行模块时，其中的代码会被执行。</p>
 </div>
-<div id="section-6" class="section level4">
+<div id="编译好的模块" class="section level4">
 <h4>编译好的模块</h4>
 <p>为了加快加载模块的速度，Python在<code>__pycache__</code>目录下缓存每个模块编译好的版本，名字为<code>module.version.pyc</code>，其中version表示编译好的文件的格式；它一般包含Python的版本号。例如，在Python 3.3中，spam.py编译好的版本将缓存为 <code>__pycache__/spam.cpython-33.pyc</code>。这种命名约定允许由不同发布和不同版本的Python编译的模块同时存在。</p>
 <p>Python会检查源文件和编译好的版本的修改日期，来查看它是否过期以及需要重新编译。这是完全自动化的过程。同时，编译后的模块是跨平台的，所以同一个库可以在不同架构的系统之间共享。</p>
 <p>Python 在两种情况下不检查缓存。第一，它会始终重新编译而且不保存直接从命令行加载的模块。第二，如果没有源模块，它不会检查缓存。若要支持没有源文件（只有编译版）的发布，编译后的模块必须在源目录下，并且必须没有源模块。</p>
 </div>
-<div id="section-7" class="section level4">
+<div id="标准模块" class="section level4">
 <h4>标准模块</h4>
 <p>Python附带了一个标准模块库，有单独的Python库参考手册。有一些模块内置于解释器中；它们提供对不属于语言核心但仍然内置的操作的访问，以提高效率或提供对系统调用等操作系统原语的访问。这些模块的集合是一个配置选项，它也取决于底层平台。例如，winreg 模块只在Windows操作系统上提供。一个特别值得注意的模块 sys，它被内嵌到每一个Python解释器中。变量 sys.ps1 和 sys.ps2 定义了主提示符和辅助提示符使用的字符串:</p>
 <pre class="python"><code>import sys
@@ -258,26 +258,26 @@ sys.ps1
 sys.ps2
 # 注意：只有在交互式模式中，这两个变量才有定义</code></pre>
 </div>
-<div id="dir" class="section level4">
+<div id="dir函数" class="section level4">
 <h4>dir()函数</h4>
 <p>内置函数 dir() 用来找出模块中定义了哪些名称。它返回一个排好序的字符串列表：</p>
 <pre class="python"><code>dir(fibo)
 # [&#39;__name__&#39;, &#39;fib&#39;, &#39;fib2&#39;]</code></pre>
 <p>如果不带参数， dir() 列出当前环境中已定义的名称。dir()不会列出内置的函数和变量的名称。</p>
 </div>
-<div id="section-8" class="section level4">
+<div id="包" class="section level4">
 <h4>包</h4>
 <p>包是一种通过用“带点号的模块名”来构造 Python 模块命名空间的方法。 例如，模块名 A.B 表示 A 包中名为 B 的子模块。正如模块的使用使得不同模块的作者不必担心彼此的全局变量名称重名一样，使用加点的模块名可以使得 NumPy 或 Pillow 等多模块软件包的作者不必担心彼此的模块名称重名。</p>
 <p>当使用 <code>from package import item</code> 时，item可以是包的子模块（或子包），也可以是包中定义的其他名称，如函数，类或变量。 import 语句首先测试是否在包中定义了item；如果没有，它假定它是一个模块并尝试加载它。如果找不到它，则引发 ImportError 异常。</p>
 <p>相反，当使用 <code>import item.subitem.subsubitem</code> 这样的语法时，除了最后一项之外的每一项都必须是一个包；最后一项可以是模块或包，但不能是前一项中定义的类或函数或变量。</p>
 </div>
-<div id="section-9" class="section level4">
+<div id="从包中导入" class="section level4">
 <h4>从包中导入 *</h4>
 <p>首先，<code>from pkg import *</code>是不建议的导入方法。如果要使用这种方法，一般应该在<code>__init__.py</code>中提供包的显式索引。
 如果一个包的 <code>__init__.py</code> 代码定义了一个名为 <code>__all__</code> 的列表，它会被视为在遇到 from package import * 时应该导入的模块名列表。如果包作者认为从他的包中导入 * 的操作没有必要被使用，也可以决定不支持此列表。</p>
 </div>
 </div>
-<div id="section-10" class="section level3">
+<div id="命名空间和作用域" class="section level3">
 <h3><a href="http://blog.cipherc.com/2015/04/25/python_namespace_and_scope">命名空间和作用域</a></h3>
 <p>命名空间（namespace）是 Python 最核心的内容。Python的名字实际上是一个字符串对象，它和所指向的目标对象一起在命名空间中构成一项 {name: object} 关联。所以命名空间是从名字到对象的一个映射(a mapping from name to objects) 。
 大部分命名空间都是按Python中的字典来实现的。名字的作用仅仅是在某个时刻与名字空间中的某个对象进行关联。其本身不包含目标对象的任何信息，只有通过对象头部的类型指针才能获知其具体类型，进而查找其相关成员数据。正因为名字的弱类型特征，我们可以在运行期间随时将其关联到任何类型对象。</p>
@@ -339,10 +339,10 @@ outer()
 <pre><code>## i = 2</code></pre>
 <p>for 后面跟着的变量(target list)在循环结束后是不会被删除的，但如果 for 循环的序列为空，这些变量是完全不会被赋值的。</p>
 </div>
-<div id="python-" class="section level3">
+<div id="python-面向对象" class="section level3">
 <h3>Python 面向对象</h3>
 <p>先有类型 (class)，再有对象(object)。Python 中的一切都是对象，包括类型。每个对象都有明确的类型。</p>
-<div id="section-11" class="section level4">
+<div id="术语简介" class="section level4">
 <h4>术语简介</h4>
 <ul>
 <li><strong>类(Class):</strong> 用来描述具有相同的属性和方法的对象的集合。它定义了该集合中每个对象所共有的属性和方法。对象是类的实例。</li>
@@ -356,7 +356,7 @@ outer()
 <li><strong>对象：</strong>通过类定义的数据结构实例。对象包括两个数据成员（类变量和实例变量）和方法。</li>
 </ul>
 </div>
-<div id="section-12" class="section level4">
+<div id="创建类" class="section level4">
 <h4>创建类</h4>
 <p>类(classes)定义的形式如下：</p>
 <pre class="python"><code>class ClassName:
@@ -366,7 +366,7 @@ outer()
     &lt;statement-N&gt;</code></pre>
 <p>类定义与函数定义 (def 语句) 一样必须被执行才会起作用。当进入类定义时，将创建一个新的命名空间，并将其用作局部作用域。因此，所有对局部变量的赋值都是在这个新命名空间之内。</p>
 </div>
-<div id="section-13" class="section level4">
+<div id="类对象" class="section level4">
 <h4>类对象</h4>
 <p>类对象支持两种操作：属性引用和实例化。</p>
 <p>类对象的属性引用使用 Python 中所有属性引用所使用的标准语法: obj.name。 有效的属性名称是类对象被创建时存在于类命名空间中的所有名称。 因此，如果类定义是这样的:</p>
@@ -387,11 +387,11 @@ x = Complex(3.0, -4.5)
 x.r, x.i</code></pre>
 <pre><code>## (3.0, -4.5)</code></pre>
 </div>
-<div id="section-14" class="section level4">
+<div id="实例对象" class="section level4">
 <h4>实例对象</h4>
 <p>实例对象(Instance Objects)支持的唯一操作是属性引用。有效的属性名称有两种：数据属性和方法。数据属性不需要声明；像局部变量一样，它们将在第一次被赋值时产生。另一类实例属性是方法，方法是从属于对象的函数。（在 Python中，方法这个术语并不是类实例所特有的，其他对象也可以有方法。）</p>
 </div>
-<div id="section-15" class="section level4">
+<div id="方法对象" class="section level4">
 <h4>方法对象</h4>
 <p><code>x.f</code> 是一个方法对象，它可以被保存起来以后再调用。</p>
 <pre class="python"><code>x = MyClass()
@@ -405,7 +405,7 @@ xf()</code></pre>
 <p>可以看到， <code>x.f()</code>没有报错，但 <code>MyClass.f()</code> 报错了。所以 <code>x.f</code> 与 <code>MyClass.f</code> 并不是一回事，它们是一个方法对象，一个是函数对象。</p>
 <p>方法的特殊之处就在于实例对象会作为函数的第一个参数被传入。 在我们的示例中，调用 x.f() 其实就相当于 MyClass.f(x)。总之，调用一个具有n个参数的实例方法就相当于调用n+1个参数的对应函数，增加的这个参数值就是方法所属的实例对象，位置在其他参数之前。</p>
 </div>
-<div id="section-16" class="section level4">
+<div id="类和实例变量" class="section level4">
 <h4>类和实例变量</h4>
 <p>一般来说，实例变量(instance variable)是唯一属于每个实例的数据，而类变量(class variable)则是类的所有实例共享的属性和方法：</p>
 <pre class="python"><code>class Dog:
@@ -422,7 +422,7 @@ d.kind, e.kind          # shared by all dogs</code></pre>
 <pre class="python"><code>e.name                  # unique to e</code></pre>
 <pre><code>## &#39;Buddy&#39;</code></pre>
 </div>
-<div id="python" class="section level4">
+<div id="python内置类属性" class="section level4">
 <h4>Python内置类属性</h4>
 <ul>
 <li><code>__dict__</code> : 类的属性（包含一个字典，由类的数据属性组成）</li>
@@ -455,9 +455,9 @@ print(&quot;Employee.__doc__:&quot;, Employee.__doc__)</code></pre>
 <pre class="python"><code>print(&quot;Employee.__bases__:&quot;, Employee.__bases__)</code></pre>
 <pre><code>## Employee.__bases__: (&lt;class &#39;object&#39;&gt;,)</code></pre>
 <pre class="python"><code>print(&quot;Employee.__dict__:&quot;, Employee.__dict__)</code></pre>
-<pre><code>## Employee.__dict__: {&#39;__module__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: &#39;base class&#39;, &#39;empCount&#39;: 0, &#39;__init__&#39;: &lt;function Employee.__init__ at 0x0000000025FC57B8&gt;, &#39;displayCount&#39;: &lt;function Employee.displayCount at 0x0000000025FC5840&gt;, &#39;displayEmployee&#39;: &lt;function Employee.displayEmployee at 0x0000000025FC58C8&gt;, &#39;__dict__&#39;: &lt;attribute &#39;__dict__&#39; of &#39;Employee&#39; objects&gt;, &#39;__weakref__&#39;: &lt;attribute &#39;__weakref__&#39; of &#39;Employee&#39; objects&gt;}</code></pre>
+<pre><code>## Employee.__dict__: {&#39;__module__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: &#39;base class&#39;, &#39;empCount&#39;: 0, &#39;__init__&#39;: &lt;function Employee.__init__ at 0x000000002B87BEA0&gt;, &#39;displayCount&#39;: &lt;function Employee.displayCount at 0x000000002B87BF28&gt;, &#39;displayEmployee&#39;: &lt;function Employee.displayEmployee at 0x000000002B891048&gt;, &#39;__dict__&#39;: &lt;attribute &#39;__dict__&#39; of &#39;Employee&#39; objects&gt;, &#39;__weakref__&#39;: &lt;attribute &#39;__weakref__&#39; of &#39;Employee&#39; objects&gt;}</code></pre>
 </div>
-<div id="section-17" class="section level4">
+<div id="补充说明" class="section level4">
 <h4>补充说明</h4>
 <p>数据属性会覆盖同名的方法属性，这在大型程序中可能带来极难发现的 bug。为了避免意外的命名冲突，使用一些约定来减少冲突的几率是明智的。可能的约定包括：方法属性名称的首字母大写，数据属性名称的前缀使用一个唯一的小写的字符串（也许只是一个下划线），或者方法使用动词而数据属性使用名词。</p>
 <p>类的方法与普通的函数只有一个特别的区别——它们必须有一个额外的<strong>第一个参数名称</strong>，按照惯例它的名称是 <code>self</code>。这仅仅是一个约定， <code>self</code> 对 Python 而言绝对没有任何特殊含义。但是如果不遵循这个约定，对其他的 Python 程序员而言你的代码可读性就会变差，而且有些类 查看器程序也可能是遵循此约定编写的。</p>
@@ -468,7 +468,7 @@ print(&quot;Employee.__doc__:&quot;, Employee.__doc__)</code></pre>
 
 t = Test()
 t.prt()</code></pre>
-<pre><code>## &lt;__main__.Test object at 0x0000000025FCE0F0&gt;
+<pre><code>## &lt;__main__.Test object at 0x000000002B880978&gt;
 ## &lt;class &#39;__main__.Test&#39;&gt;</code></pre>
 <p>从执行结果可以很明显的看出，self 代表的是类的实例，代表当前对象的地址，而 <strong><code>self.__class__</code></strong> 则指向类。</p>
 <p>类属性的任何函数对象都为那个类的实例定义了一个方法。函数定义代码不一定非得定义在类中：也可以将一个函数对象赋值给类中的一个局部变量。例如：</p>
@@ -495,7 +495,7 @@ class C:
         self.add(x)</code></pre>
 <p>方法可以像普通函数那样引用全局命名。与方法关联的全局作用域是包含这个方法的定义的模块（类）。（类本身永远不会作为全局作用域使用）</p>
 </div>
-<div id="section-18" class="section level4">
+<div id="类的继承" class="section level4">
 <h4>类的继承</h4>
 <p>面向对象的编程带来的主要好处之一是代码的重用，实现这种重用的方法之一是通过继承机制。</p>
 <p>通过继承创建的新类称为<strong>子类</strong>或<strong>派生类</strong>，被继承的类称为<strong>基类</strong>或<strong>父类</strong>。</p>
@@ -561,7 +561,7 @@ c.myMethod()</code></pre>
 <pre><code>## Call subclass method</code></pre>
 <p>派生类中的覆盖方法可能是想要扩充而不是简单的替代基类中的重名方法。有一个简单的方法可以直接调用基类方法：只要调用 <code>BaseClassName.methodname(self, arguments)</code>。</p>
 </div>
-<div id="section-19" class="section level4">
+<div id="私有变量" class="section level4">
 <h4>私有变量</h4>
 <p>Python中并不存在所谓只能在对象内部才能访问的“私有”实例变量。然而，有一项大多数 Python 代码都遵循的习惯：带有一个下划线前缀的名称（例如<code>_spam</code> ）应被视为非公开的 API 的一部分（无论是函数、 方法还是数据成员）。</p>
 <p>由于存在一种合理的类私有成员使用场景（例如为了避免名称与子类所定义名称的冲突），Python 对这种机制提供了简单的支持，即所谓“名称重整” （<em>name mangling</em>）。<code>__spam</code> 形式的任何标识符（前面至少两个下划线，后面至多一个下划线）将被替换为 <code>_classname__spam</code>，其中 <code>classname</code> 为去除了前缀下划线的当前类名称。这种替换不考虑标识符的句法位置，只要它出现在类的定义内就会进行。</p>
@@ -584,7 +584,7 @@ class MappingSubclass(Mapping):
         for item in zip(keys, values):
             self.items_list.append(item)</code></pre>
 </div>
-<div id="section-20" class="section level4">
+<div id="迭代器" class="section level4">
 <h4>迭代器</h4>
 <p>你可能注意到大多数容器对象都可以用 <a href="https://yiyibooks.cn/__trs__/xx/python_352/reference/compound_stmts.html#for"><code>for</code></a> 遍历：</p>
 <pre class="python"><code>for element in [1, 2, 3]:
@@ -602,11 +602,11 @@ for line in open(&quot;myfile.txt&quot;):
 s = &#39;abc&#39;
 it = iter(s)
 it</code></pre>
-<pre><code>## &lt;str_iterator object at 0x0000000025FBE2B0&gt;</code></pre>
+<pre><code>## &lt;str_iterator object at 0x000000002B887128&gt;</code></pre>
 <pre class="python"><code>next(it),next(it),next(it)</code></pre>
 <pre><code>## (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)</code></pre>
 </div>
-<div id="section-21" class="section level4">
+<div id="元类" class="section level4">
 <h4>元类</h4>
 <p>在Python中，类也是对象（Classes are objects）。</p>
 <pre class="python"><code>class ObjectCreator:
@@ -627,7 +627,7 @@ hasattr(ObjectCreator, &#39;new_attr&#39;)</code></pre>
 <pre><code>## &#39;foo&#39;</code></pre>
 <pre class="python"><code>ObjectCreatorMirror = ObjectCreator
 print(ObjectCreatorMirror())</code></pre>
-<pre><code>## &lt;__main__.ObjectCreator object at 0x0000000025FD94A8&gt;</code></pre>
+<pre><code>## &lt;__main__.ObjectCreator object at 0x000000002B87DA20&gt;</code></pre>
 <p>因为类是对象，所以你可以想对象一样动态地创建它们。</p>
 <pre class="python"><code>def choose_class(name):
     if name == &quot;foo&quot;:
@@ -643,7 +643,7 @@ myclass = choose_class(&#39;foo&#39;)
 print(myclass)</code></pre>
 <pre><code>## &lt;class &#39;__main__.choose_class.&lt;locals&gt;.Foo&#39;&gt;</code></pre>
 <pre class="python"><code>print(myclass())</code></pre>
-<pre><code>## &lt;__main__.choose_class.&lt;locals&gt;.Foo object at 0x0000000025FD9EB8&gt;</code></pre>
+<pre><code>## &lt;__main__.choose_class.&lt;locals&gt;.Foo object at 0x000000002B88D710&gt;</code></pre>
 <p>因为类是对象，所以肯定可以由某些东西来创建。一种是使用关键词<code>class</code>，另一种是使用<code>type</code>函数手动创建。<code>type</code>函数常见的作用是查看对象的类型（type）。</p>
 <pre class="python"><code>type(1)</code></pre>
 <pre><code>## &lt;class &#39;int&#39;&gt;</code></pre>
@@ -662,7 +662,7 @@ print(myclass)</code></pre>
 print(MyShinyClass)</code></pre>
 <pre><code>## &lt;class &#39;__main__.MyShinyClass&#39;&gt;</code></pre>
 <pre class="python"><code>print(MyShinyClass())</code></pre>
-<pre><code>## &lt;__main__.MyShinyClass object at 0x00000000262B56D8&gt;</code></pre>
+<pre><code>## &lt;__main__.MyShinyClass object at 0x000000002B880630&gt;</code></pre>
 <pre class="python"><code>Foo = type(&#39;Foo&#39;, (MyShinyClass,), {&#39;bar&#39;:True}) #inherit from MyShinyClass
 Foo.bar</code></pre>
 <pre><code>## True</code></pre>
@@ -701,6 +701,6 @@ bar.__class__
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>参考资料：<a href="http://blog.konghy.cn/2017/04/24/python-entry-program/">Python 中的 if <code>__name__</code> == <code>__main__</code> 该如何理解</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>参考资料：<a href="http://blog.konghy.cn/2017/04/24/python-entry-program/">Python 中的 if <code>__name__</code> == <code>__main__</code> 该如何理解</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>

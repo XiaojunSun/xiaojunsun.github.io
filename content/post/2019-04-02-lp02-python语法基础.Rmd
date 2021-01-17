@@ -10,7 +10,7 @@ tags:
 output: html_document
 ---
 
-以下内容主要参考[《利用Python进行数据分析·第2版》](https://www.jianshu.com/p/04d180d90a3f)和[Python官方文档 3.7.3](https://docs.python.org/3/tutorial/index.html)
+以下内容主要参考[《利用Python进行数据分析·第2版》](https://www.jianshu.com/p/04d180d90a3f)和[Python官方文档 3.7.3](https://docs.python.org/3.7/tutorial/index.html)
 
 
 ### 控制流

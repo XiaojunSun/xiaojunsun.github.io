@@ -20,7 +20,7 @@ library(data.table)
 
 
 # pipeR包
-pipeR 提供 `%>>%` 管道操作符，
+pipeR 提供 `%>>%` 管道操作符。
 
 ## 传递到第一个参数
 ```{r}

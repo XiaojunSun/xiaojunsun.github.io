@@ -4,10 +4,11 @@ title = "Xiaojun's Blog"
 theme = "hugo-lithium"
 googleAnalytics = ""
 disqusShortname = ""
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 enableEmoji = true
 relativeURLs = true
 hasCJKLanguage = true
+math = true
 
 [permalinks]
     post = "/:year/:month/:day/:slug/"
@@ -33,7 +34,7 @@ hasCJKLanguage = true
     author = "Xiaojun Sun"
     dateFormat = "2006/01/02"
     description = "A personal blog built through Hugo and blogdown."
-    footer = "&copy; [Xiaojun Sun](https://github.com/xiaojunsun) 2020 | Powered by the [Hugo](https://gohugo.io/) and [blogdown](https://github.com/rstudio/blogdown)"
+    footer = "&copy; [Xiaojun Sun](https://github.com/xiaojunsun) 2021 | Powered by the [Hugo](https://gohugo.io/) and [blogdown](https://github.com/rstudio/blogdown)"
     
     # options for highlight.js (version, additional languages, and theme)
     highlightjsVersion = "9.11.0"

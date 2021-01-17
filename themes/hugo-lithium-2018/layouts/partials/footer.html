@@ -1,9 +1,8 @@
-    <footer class="footer">
-	{{ with .Site.Params.footer}}
+    <footer class="footer-links">
+    {{ with .Site.Params.footer}}
     {{ . | markdownify }}
-	{{ end }}
-
-    </div>
+    {{ end }}
+    </footer>
     {{ partial "footer_highlightjs" . }}
     {{ partial "footer_mathjax" . }}
     {{ template "_internal/google_analytics.html" . }}

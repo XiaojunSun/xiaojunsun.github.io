@@ -7,6 +7,9 @@ categories:
   - Learn Python
 tags:
   - Python
+output: 
+  html_document: 
+    toc: yes
 ---
 
 函数是Python中最主要也是最重要的代码组织和复用手段。作为最重要的原则，如果你要重复使用相同或非常类似的代码，就需要写一个函数。
@@ -180,7 +183,7 @@ ints = [4, 0, 1, 5, 6]
 apply_to_list(ints, lambda x: x * 2)
 ```
 
-虽然你可以直接编写`[x *2 for x in ints]`，但是这里我们可以非常轻松地传入一个自定义运算给apply_to_list函数。
+虽然你可以直接编写`[x *2 for x in ints]`，但是这里我们可以非常轻松地传入一个自定义函数给apply_to_list函数。
 
 再来看另外一个例子。假设有一组字符串，你想要根据各字符串不同字母的数量对其进行排序：
 

@@ -1,6 +1,6 @@
 ---
 title: "Hello R Markdown"
-author: "Frida Gomam"
+author: Xiaojun Sun
 date: 2015-07-23T21:13:14-05:00
 categories: ["Tutorial"]
 tags: ["R", "Markdown"]
@@ -30,8 +30,8 @@ fit
 ## (Intercept)        speed  
 ##     -17.579        3.932</code></pre>
 </div>
-<div id="including-plots" class="section level1">
-<h1>Including Plots</h1>
+<div id="include-plots" class="section level1">
+<h1>Include Plots</h1>
 <p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
 <pre class="r"><code>par(mar = c(0, 1, 0, 1))
 pie(
@@ -46,4 +46,26 @@ pie(
 Figure 1: A fancy pie chart.
 </p>
 </div>
+</div>
+<div id="math" class="section level1">
+<h1>Math</h1>
+<p>We can use <a href="https://katex.org/">KaTeX</a> in the post:</p>
+<pre><code>\begin{alignedat}{2}
+   10&amp;x+ &amp;3&amp;y = 2 \\
+   3&amp;x+&amp;13&amp;y = 4
+\end{alignedat}</code></pre>
+<p>to</p>
+<p><span class="math display">\[
+\begin{alignedat}{2}
+   10&amp;x+ &amp;3&amp;y = 2 \\
+   3&amp;x+&amp;13&amp;y = 4
+\end{alignedat}
+\]</span></p>
+<p>Also inline style supported, eg. <span class="math inline">\(\textstyle\sum_{i=1}^n x\)</span>.</p>
+<p>Learn the supported functions in the <a href="https://katex.org/docs/supported.html">official site</a>.</p>
+</div>
+<div id="emoji" class="section level1">
+<h1>emoji</h1>
+<p>:gift_heart: :tea:</p>
+<p>See more in <a href="https://www.webfx.com/tools/emoji-cheat-sheet/">emoji cheatsheet</a>.</p>
 </div>

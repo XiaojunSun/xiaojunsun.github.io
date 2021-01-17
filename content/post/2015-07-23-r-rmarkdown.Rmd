@@ -1,6 +1,6 @@
 ---
 title: "Hello R Markdown"
-author: "Frida Gomam"
+author: Xiaojun Sun
 date: 2015-07-23T21:13:14-05:00
 categories: ["Tutorial"]
 tags: ["R", "Markdown"]
@@ -22,7 +22,7 @@ fit <- lm(dist ~ speed, data = cars)
 fit
 ```
 
-# Including Plots
+# Include Plots
 
 You can also embed plots. See Figure \@ref(fig:pie) for example:
 
@@ -35,3 +35,31 @@ pie(
   init.angle = -50, border = NA
 )
 ```
+
+# Math
+We can use [KaTeX](https://katex.org/) in the post:
+
+```
+\begin{alignedat}{2}
+   10&x+ &3&y = 2 \\
+   3&x+&13&y = 4
+\end{alignedat}
+```
+to
+
+$$
+\begin{alignedat}{2}
+   10&x+ &3&y = 2 \\
+   3&x+&13&y = 4
+\end{alignedat}
+$$
+
+Also inline style supported, eg. $\textstyle\sum_{i=1}^n x$.
+
+Learn the supported functions in the [official site](https://katex.org/docs/supported.html).
+
+# emoji
+:gift_heart: :tea:
+
+See more in [emoji cheatsheet](https://www.webfx.com/tools/emoji-cheat-sheet/).
+
