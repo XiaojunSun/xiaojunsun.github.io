@@ -8,9 +8,7 @@ tags:
   - Markdown
   - R
 slug: intro-rmarkdown
-output: 
-  html_document: 
-    toc: yes
+output: html_document
 ---
 
 # 常用工具
@@ -41,7 +39,6 @@ output:
 用`>`可以创建引用样式。比如：
 
 > 西蒙·波伏娃，出生于巴黎一个天主教色彩很深的资产阶级家庭。她具有作家，哲学家、散文家、戏剧家等多重身份，是成为存在主义代表性的人物，女权运动的先驱，主要作品有《西蒙·波伏娃的美国纪行》、《满大人》、《老年》、《第二性》等。
->> 这是嵌套引用
 
 ## 列表
 ```markdown
@@ -156,7 +153,7 @@ $$
 
 比如B站视频：
 
-<iframe src="//player.bilibili.com/player.html?aid=60046431&bvid=BV18t411E7GZ&cid=104568723&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="850" height="485"> </iframe>
+<iframe src="//player.bilibili.com/player.html?aid=60046431&bvid=BV18t411E7GZ&cid=104568723&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width= 100% height = 500px> </iframe>
 
 # 段内元素
 
@@ -184,7 +181,8 @@ $$
 ![Alt text](/path/to/img.jpg "Optional title")
 ```
 
-![](http://i.imgbox.com/5aw3DW4B.jpg "R on windows") 
+
+<img src="http://p6.qhimg.com/bdr/__85/t01a15790a10cf3d699.jpg" title="beautiful View" width=100%>
 
 ## 强调
 
@@ -215,7 +213,7 @@ $$
 
 :gift_heart: :tea:
 
-# R Markdown
+# [R Markdown](https://rmarkdown.rstudio.com/)
 
 ## 生成图片
 
@@ -230,3 +228,25 @@ pie(
   init.angle = -50, border = NA
 )
 ```
+
+## 插入R代码并运行
+```{r}
+head(cars)
+```
+
+```{r}
+summary(cars)
+```
+
+
+## 插入Python代码
+
+通过插入代码块，并标记为Python代码，指定Python解释器的位置（只需一次）：`{python engine.path="D:/Project/Anaconda3/python.exe"}`，就可以在RMarkdown插入Python代码了。
+
+```{python engine.path="D:/Project/Anaconda3/python.exe"}
+def my_add(x, y):
+    return x + y
+  
+my_add(100, 200)
+```
+
