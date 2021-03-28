@@ -11,28 +11,29 @@ slug: intro-rmarkdown
 output: html_document
 ---
 
-# 常用工具
+# 常用工具 {#常用工具}
 
-- 数学公式：[Katex](https://katex.org/docs/supported.html)
-- 表格工具：[Table generator](https://www.tablesgenerator.com/)
-- emoji表情：[emoji cheatsheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
-- 流程图：[draw.io](https://app.diagrams.net/)
-- 数学绘图：[geogebra](https://geogebra.kz16.top/)
+-   数学公式：[Katex](https://katex.org/docs/supported.html)
+-   表格工具：[Table generator](https://www.tablesgenerator.com/)
+-   emoji表情：[emoji cheatsheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
+-   流程图：[draw.io](https://app.diagrams.net/)
+-   数学绘图：[geogebra](https://geogebra.kz16.top/)
 
 # 区块元素
+
 ## 段落
+
 一般使用一个空行，或者两个段尾空格来分段，也可以插入`<br/>`来分段。如果只是按`Enter`则无法分段。
 
 ## 标题
+
 以1到6个`#`加上文字，就可以创建标题，对应1到6级标题。
 
-```
-# This is an H1
+    # This is an H1
 
-## This is an H2
+    ## This is an H2
 
-###### This is an H6
-```
+    ###### This is an H6
 
 ## 引用
 
@@ -41,7 +42,8 @@ output: html_document
 > 西蒙·波伏娃，出生于巴黎一个天主教色彩很深的资产阶级家庭。她具有作家，哲学家、散文家、戏剧家等多重身份，是成为存在主义代表性的人物，女权运动的先驱，主要作品有《西蒙·波伏娃的美国纪行》、《满大人》、《老年》、《第二性》等。
 
 ## 列表
-```markdown
+
+``` {.markdown}
 ## un-ordered list
 *   Red
 *   Green
@@ -49,43 +51,49 @@ output: html_document
 
 ## ordered list
 1.  Red
-2. 	Green
-3.	Blue
+2.  Green
+3.  Blue
 ```
+
 实现效果如下：
 
 ## un-ordered list
-*   Red
-*   Green
-*   Blue
+
+-   Red
+-   Green
+-   Blue
 
 ## ordered list
+
 1.  Red
-2. 	Green
-3.	Blue
+2.  Green
+3.  Blue
 
 ## 任务
+
 用 [ ] 或 [x] 可以任务清单。
 
-```markdown
+``` {.markdown}
 - [ ] a task list item
 - [ ] list syntax required
 - [ ] normal **formatting**, @mentions, #1234 refs
 - [ ] incomplete
 - [x] completed
 ```
+
 实现效果如下：
 
-- [ ] a task list item
-- [ ] list syntax required
-- [ ] normal **formatting**, @mentions, #1234 refs
-- [ ] incomplete
-- [x] completed
+-   [ ] a task list item
+-   [ ] list syntax required
+-   [ ] normal **formatting**, @mentions, \#1234 refs
+-   [ ] incomplete
+-   [x] completed
 
 ## 代码块
-用成对的三个`可以创建代码块，代码要放在中间。
 
-```python
+用成对的三个\`可以创建代码块，代码要放在中间。
+
+``` {.python}
 def my_function(x, y, z=1.5):
     if z > 1:
         return z * (x + y)
@@ -95,15 +103,13 @@ def my_function(x, y, z=1.5):
 
 ## 数学公式
 
+    $$
+    \begin{alignedat}{2}
+       10&x+ &3&y = 2 \\
+       3&x+&13&y = 4
+    \end{alignedat}
+    $$
 
-```
-$$
-\begin{alignedat}{2}
-   10&x+ &3&y = 2 \\
-   3&x+&13&y = 4
-\end{alignedat}
-$$
-```
 实现效果如下：
 
 $$
@@ -112,58 +118,61 @@ $$
    3&x+&13&y = 4
 \end{alignedat}
 $$
+
 行内公式也支持 $y=\textstyle\sum_{i=1}^n x$。
 
 ## 表格
-```
-| Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
-```
+
+    | Left-Aligned  | Center Aligned  | Right Aligned |
+    | :------------ |:---------------:| -----:|
+    | col 3 is      | some wordy text | $1600 |
+    | col 2 is      | centered        |   $12 |
+    | zebra stripes | are neat        |    $1 |
+
 实现效果如下：
 
 | Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
+|:--------------|:---------------:|--------------:|
+| col 3 is      | some wordy text |        \$1600 |
+| col 2 is      |    centered     |          \$12 |
+| zebra stripes |    are neat     |           \$1 |
 
 ## 脚注
 
-```
-可以像这样插入脚注[^注1].
+    可以像这样插入脚注[^注1].
 
-[^注1]: Here is the *text* of the **footnote**.
-```
+    [^注1]: Here is the *text* of the **footnote**.
+
 实现效果如下：
 
-可以像这样插入脚注[^注1].
+可以像这样插入脚注[^1].
 
-[^注1]: 这里是*脚注*的**内容**。
+[^1]: 这里是*脚注*的**内容**。
 
 ## 横线分割线
 
-*** 或 ---可以创建横线分割线。实现效果如下：
+\*\*\* 或 ---可以创建横线分割线。实现效果如下：
 
----
+------------------------------------------------------------------------
 
 ## 插入html元素
 
 比如B站视频：
 
-<iframe src="//player.bilibili.com/player.html?aid=60046431&bvid=BV18t411E7GZ&cid=104568723&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width= 100% height = 500px> </iframe>
+<iframe src="//player.bilibili.com/player.html?aid=60046431&amp;bvid=BV18t411E7GZ&amp;cid=104568723&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" height="500px">
+
+</iframe>
 
 # 段内元素
 
 ## 网页链接
-```
-这是一个[样例链接](http://example.com/)。
-```
+
+    这是一个[样例链接](http://example.com/)。
+
 实现效果如下：这是一个[样例链接](http://example.com/)。
 
 ## 内部链接
+
 `跳转到[常用工具](#常用工具)`
 
 实现效果如下：跳转到[常用工具](#常用工具)
@@ -175,40 +184,38 @@ $$
 ## 图片
 
 用以下两种样式插入图片：
-```
-![Alt text](/path/to/img.jpg)
 
-![Alt text](/path/to/img.jpg "Optional title")
-```
+    ![Alt text](/path/to/img.jpg)
 
+    ![Alt text](/path/to/img.jpg "Optional title")
 
-<img src="http://p6.qhimg.com/bdr/__85/t01a15790a10cf3d699.jpg" title="beautiful View" width=100%>
+<img src="http://p6.qhimg.com/bdr/__85/t01a15790a10cf3d699.jpg" title="beautiful View" width="100%"/>
 
 ## 强调
 
-```
-<kbd>Esc</kbd>
-*斜体文本1*   _斜体文本2_ 
-**粗体文本1**  __粗体文本2__ 
-***粗斜体文本1***  ___粗斜体文本2___
-<u>下划线文本</u>  ~~删除线文本~~
-变为<font color="red">红</font>色
-```
+    <kbd>Esc</kbd>
+    *斜体文本1*   _斜体文本2_ 
+    **粗体文本1**  __粗体文本2__ 
+    ***粗斜体文本1***  ___粗斜体文本2___
+    <u>下划线文本</u>  ~~删除线文本~~
+    变为<font color="red">红</font>色
+
 实现效果如下：
 
 <kbd>Esc</kbd>
 
-*斜体文本1*   _斜体文本2_ 
+*斜体文本1* *斜体文本2*
 
-**粗体文本1**  __粗体文本2__
+**粗体文本1** **粗体文本2**
 
-***粗斜体文本1***  ___粗斜体文本2___
+***粗斜体文本1*** ***粗斜体文本2***
 
-<u>下划线文本</u>  ~~删除线文本~~
+<u>下划线文本</u> ~~删除线文本~~
 
 变为<font color="red">红</font>色
 
 ## Emoji表情
+
 用一对:包围，参考[官网](https://www.webfx.com/tools/emoji-cheat-sheet/)格式即可插入表情。
 
 :gift_heart: :tea:
@@ -230,6 +237,7 @@ pie(
 ```
 
 ## 插入R代码并运行
+
 ```{r}
 head(cars)
 ```
@@ -237,7 +245,6 @@ head(cars)
 ```{r}
 summary(cars)
 ```
-
 
 ## 插入Python代码
 
@@ -250,3 +257,10 @@ def my_add(x, y):
 my_add(100, 200)
 ```
 
+# 可视化编辑模式
+
+RStudio v1.4或更高版本支持可视化的RMarkdown编辑模式。在此模式下，可是实现接近所见即所得的效果，提供丰富的工具栏和快捷键支持。
+
+![toolbar](https://rstudio.github.io/visual-markdown-editing/images/visual-editing-toolbar.png)
+
+在行首使用`/`快捷键，可以快速调出几乎所有快捷方式，和知名的笔记软件Notion一样。
