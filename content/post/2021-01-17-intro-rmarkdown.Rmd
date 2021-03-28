@@ -250,17 +250,39 @@ summary(cars)
 
 通过插入代码块，并标记为Python代码，指定Python解释器的位置（只需一次）：`{python engine.path="D:/Project/Anaconda3/python.exe"}`，就可以在RMarkdown插入Python代码了。
 
-```{python engine.path="D:/Project/Anaconda3/python.exe"}
+```{python engine.path="D:/Python/Anaconda3/python.exe"}
 def my_add(x, y):
     return x + y
   
 my_add(100, 200)
 ```
 
-# 可视化编辑模式
+## 插入SQL
+参考[Introduction to MySQL with R](https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r) 和 [Database Using R](https://db.rstudio.com/getting-started/connect-to-database/)。
+
+```{r}
+library(RMariaDB)
+myDb <- dbConnect(RMariaDB::MariaDB(),
+                       user='root', password='123456',
+                       host='localhost', port='3306',
+                       dbname ='python')
+dbListTables(myDb)
+```
+
+```{sql connection= myDb, output.var = "usertb"}
+SELECT * FROM python.user_tb;
+```
+
+```{r}
+head(usertb)
+dbDisconnect(myDb)
+```
+
+## 可视化编辑模式
 
 RStudio v1.4或更高版本支持可视化的RMarkdown编辑模式。在此模式下，可是实现接近所见即所得的效果，提供丰富的工具栏和快捷键支持。
 
 ![toolbar](https://rstudio.github.io/visual-markdown-editing/images/visual-editing-toolbar.png)
 
 在行首使用`/`快捷键，可以快速调出几乎所有快捷方式，和知名的笔记软件Notion一样。
+

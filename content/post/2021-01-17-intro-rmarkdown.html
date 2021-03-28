@@ -11,6 +11,7 @@ slug: intro-rmarkdown
 output: html_document
 ---
 
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <div id="常用工具" class="section level1">
@@ -83,7 +84,7 @@ output: html_document
 - [ ] incomplete
 - [x] completed</code></pre>
 <p>实现效果如下：</p>
-<ul>
+<ul class="task-list">
 <li><input type="checkbox" disabled="" />
 a task list item</li>
 <li><input type="checkbox" disabled="" />
@@ -119,8 +120,8 @@ $$</code></pre>
    10&amp;x+ &amp;3&amp;y = 2 \\
    3&amp;x+&amp;13&amp;y = 4
 \end{alignedat}
-\]</span>
-行内公式也支持 <span class="math inline">\(y=\textstyle\sum_{i=1}^n x\)</span>。</p>
+\]</span></p>
+<p>行内公式也支持 <span class="math inline">\(y=\textstyle\sum_{i=1}^n x\)</span>。</p>
 </div>
 <div id="表格" class="section level2">
 <h2>表格</h2>
@@ -199,7 +200,7 @@ $$</code></pre>
 <pre><code>![Alt text](/path/to/img.jpg)
 
 ![Alt text](/path/to/img.jpg &quot;Optional title&quot;)</code></pre>
-<p><img src="http://p6.qhimg.com/bdr/__85/t01a15790a10cf3d699.jpg" title="beautiful View" width=100%></p>
+<p><img src="http://p6.qhimg.com/bdr/__85/t01a15790a10cf3d699.jpg" title="beautiful View" width="100%"/></p>
 </div>
 <div id="强调" class="section level2">
 <h2>强调</h2>
@@ -269,6 +270,33 @@ Figure 1: A fancy pie chart.
   
 my_add(100, 200)</code></pre>
 <pre><code>## 300</code></pre>
+</div>
+<div id="插入sql" class="section level2">
+<h2>插入SQL</h2>
+<p>参考<a href="https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r">Introduction to MySQL with R</a> 和 <a href="https://db.rstudio.com/getting-started/connect-to-database/">Database Using R</a>。</p>
+<pre class="r"><code>library(RMariaDB)</code></pre>
+<pre><code>## Warning: package &#39;RMariaDB&#39; was built under R version 4.0.4</code></pre>
+<pre class="r"><code>myDb &lt;- dbConnect(RMariaDB::MariaDB(),
+                       user=&#39;root&#39;, password=&#39;123456&#39;,
+                       host=&#39;localhost&#39;, port=&#39;3306&#39;,
+                       dbname =&#39;python&#39;)
+dbListTables(myDb)</code></pre>
+<pre><code>## [1] &quot;addressbook&quot; &quot;employees&quot;   &quot;order_tb&quot;    &quot;user_tb&quot;</code></pre>
+<pre class="sql"><code>SELECT * FROM python.user_tb;</code></pre>
+<pre class="r"><code>head(usertb)</code></pre>
+<pre><code>##   user_id name  pass gender
+## 1       1  Sun 78671   Male
+## 2       2  Jun 12345   Male</code></pre>
+<pre class="r"><code>dbDisconnect(myDb)</code></pre>
+</div>
+<div id="可视化编辑模式" class="section level2">
+<h2>可视化编辑模式</h2>
+<p>RStudio v1.4或更高版本支持可视化的RMarkdown编辑模式。在此模式下，可是实现接近所见即所得的效果，提供丰富的工具栏和快捷键支持。</p>
+<div class="figure">
+<img src="https://rstudio.github.io/visual-markdown-editing/images/visual-editing-toolbar.png" alt="" />
+<p class="caption">toolbar</p>
+</div>
+<p>在行首使用<code>/</code>快捷键，可以快速调出几乎所有快捷方式，和知名的笔记软件Notion一样。</p>
 </div>
 </div>
 <div class="footnotes">
