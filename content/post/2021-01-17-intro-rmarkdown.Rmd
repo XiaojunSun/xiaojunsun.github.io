@@ -258,7 +258,9 @@ my_add(100, 200)
 ```
 
 ## 插入SQL
-参考[Introduction to MySQL with R](https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r) 和 [Database Using R](https://db.rstudio.com/getting-started/connect-to-database/)。
+- [Introduction to MySQL with R](https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r)
+- [Database Using R](https://db.rstudio.com/getting-started/connect-to-database/)
+- [21分钟MySQL基础入门](https://github.com/jaywcjlove/mysql-tutorial/blob/master/21-minutes-MySQL-basic-entry.md)
 
 ```{r}
 library(RMariaDB)

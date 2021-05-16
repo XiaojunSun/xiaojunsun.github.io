@@ -1,0 +1,544 @@
+---
+title: "在R中学习MySQL"
+author: "Xiaojun Sun"
+date: '2021-04-03'
+output:
+  html_document:
+    df_print: paged
+categories: Notes
+tags: SQL
+slug: learn-mysql-in-r
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="在r中使用mysql" class="section level1">
+<h1>在R中使用MySQL</h1>
+<div id="连接mysql数据库" class="section level2">
+<h2>连接MySQL数据库</h2>
+<pre class="r"><code>library(RMariaDB)
+library(tidyverse)
+myDb &lt;- dbConnect(RMariaDB::MariaDB(),
+                       user=&#39;root&#39;, password=&#39;123456&#39;,
+                       host=&#39;localhost&#39;, port=&#39;3306&#39;,
+                       dbname =&#39;python&#39;)
+dbListTables(myDb)</code></pre>
+<pre><code>## [1] &quot;addressbook&quot;   &quot;employees&quot;     &quot;mpg_tb&quot;        &quot;order_tb&quot;     
+## [5] &quot;team&quot;          &quot;user_accounts&quot; &quot;user_tb&quot;</code></pre>
+</div>
+<div id="将data.frame写入数据库" class="section level2">
+<h2>将data.frame写入数据库</h2>
+<pre class="r"><code>dbSendQuery(myDb, &#39;DROP TABLE IF EXISTS `mpg_tb`;&#39;)</code></pre>
+<pre><code>## &lt;MariaDBResult&gt;
+##   SQL  DROP TABLE IF EXISTS `mpg_tb`;
+##   ROWS Fetched: 0 [complete]
+##        Changed: 0</code></pre>
+<pre class="r"><code>## 将数据框mpg写入myDb，表名为mpg_tb
+dbWriteTable(myDb, value = mpg, row.names = FALSE, name = &quot;mpg_tb&quot;, append = TRUE)</code></pre>
+<pre><code>## Warning in result_create(conn@ptr, statement, is_statement): Cancelling previous
+## query</code></pre>
+</div>
+<div id="获取关于数据表的描述信息" class="section level2">
+<h2>获取关于数据表的描述信息</h2>
+<pre class="r"><code>query &lt;- &quot;describe python.mpg_tb&quot;
+rsps = dbSendQuery(myDb, query)
+dbFetch(rsps)</code></pre>
+<pre><code>##           Field        Type Null Key Default Extra
+## 1  manufacturer varchar(10)  YES        &lt;NA&gt;      
+## 2         model varchar(22)  YES        &lt;NA&gt;      
+## 3         displ      double  YES        &lt;NA&gt;      
+## 4          year         int  YES        &lt;NA&gt;      
+## 5           cyl         int  YES        &lt;NA&gt;      
+## 6         trans varchar(10)  YES        &lt;NA&gt;      
+## 7           drv  varchar(1)  YES        &lt;NA&gt;      
+## 8           cty         int  YES        &lt;NA&gt;      
+## 9           hwy         int  YES        &lt;NA&gt;      
+## 10           fl  varchar(1)  YES        &lt;NA&gt;      
+## 11        class varchar(10)  YES        &lt;NA&gt;</code></pre>
+</div>
+<div id="数据库查询" class="section level2">
+<h2>数据库查询</h2>
+<pre class="r"><code>query &lt;- &quot;SELECT manufacturer, model, displ, year, cyl from mpg_tb limit 10&quot;
+rsps = dbSendQuery(myDb, query)</code></pre>
+<pre><code>## Warning in result_create(conn@ptr, statement, is_statement): Cancelling previous
+## query</code></pre>
+<pre class="r"><code>dbFetch(rsps, n = 5) # n指定最大读取行数</code></pre>
+<pre><code>##   manufacturer model displ year cyl
+## 1         audi    a4   1.8 1999   4
+## 2         audi    a4   1.8 1999   4
+## 3         audi    a4   2.0 2008   4
+## 4         audi    a4   2.0 2008   4
+## 5         audi    a4   2.8 1999   6</code></pre>
+</div>
+<div id="与dplyr-结合使用" class="section level2">
+<h2>与<code>dplyr</code> 结合使用</h2>
+<p><code>dplyr</code> 保持尽可能的懒惰，只在必要的时候才会执行数据库操作语句。</p>
+<pre class="r"><code>rmydb &lt;- tbl(myDb, &quot;mpg_tb&quot;)</code></pre>
+<pre><code>## Warning in result_create(conn@ptr, statement, is_statement): Cancelling previous
+## query</code></pre>
+<pre class="r"><code>subdb &lt;- rmydb %&gt;% select(manufacturer:cyl) 
+subdb %&gt;% show_query() # 将R语句翻译成SQL语句</code></pre>
+<pre><code>## &lt;SQL&gt;
+## SELECT `manufacturer`, `model`, `displ`, `year`, `cyl`
+## FROM `mpg_tb`</code></pre>
+<p>使用<code>collect</code>函数可以将数据从数据库中抽取到R中。</p>
+<pre class="r"><code>localsubdb&lt;- subdb %&gt;% collect() # 将数据库中的数据抽取到R中
+head(localsubdb)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   manufacturer model displ  year   cyl
+##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1 audi         a4      1.8  1999     4
+## 2 audi         a4      1.8  1999     4
+## 3 audi         a4      2    2008     4
+## 4 audi         a4      2    2008     4
+## 5 audi         a4      2.8  1999     6
+## 6 audi         a4      2.8  1999     6</code></pre>
+<p><code>dbBind</code> 和
+<code>dbSendQuery</code>结合，可以实现SQL查询语句中的参数传递，实现SQL语句的重复利用。参数需要以list形式进行传递。</p>
+<pre class="r"><code>temp_otp &lt;- dbSendQuery(myDb, &quot;SELECT `manufacturer`, `displ`, `year`, `cyl` from `mpg_tb` WHERE  displ &gt; ? limit 3&quot;)
+dbBind(temp_otp, list(2))
+dbFetch(temp_otp)</code></pre>
+<pre><code>##   manufacturer displ year cyl
+## 1         audi   2.8 1999   6
+## 2         audi   2.8 1999   6
+## 3         audi   3.1 2008   6</code></pre>
+<pre class="r"><code>dbBind(temp_otp, list(3))
+dbFetch(temp_otp)</code></pre>
+<pre><code>##   manufacturer displ year cyl
+## 1         audi   3.1 2008   6
+## 2         audi   3.1 2008   6
+## 3         audi   3.1 2008   6</code></pre>
+<pre class="r"><code>dbClearResult(temp_otp)</code></pre>
+</div>
+<div id="断开数据库连接" class="section level2">
+<h2>断开数据库连接</h2>
+<p>使用完毕数据库之后，一定要断开数据库连接，运行<code>dbDisconnect(myDb)</code>。</p>
+</div>
+</div>
+<div id="mysql语法" class="section level1">
+<h1>MySQL语法</h1>
+<p>MySQL 为关系型数据库(Relational Database Management System)，一个关系型数据库由一个或数个表格组成</p>
+<ul>
+<li><code>表头(header)</code>:数据的项目名称;</li>
+<li><code>列(col)</code>: 字段;</li>
+<li><code>行(row)</code>: 记录;</li>
+<li><code>值(value)</code>: 每个单元格的具体值;</li>
+<li><code>键(key)</code>: 唯一识别一行的字段。</li>
+</ul>
+<p>SQL 语句可以分为以下三类：</p>
+<ul>
+<li>DDL（Data Definition Language，数据定义语言）用来创建或者删除存储
+数据用的数据库以及数据库中的表等对象。</li>
+<li>DML（Data Manipulation Language，数据操纵语言）用来查询或者变更 表中的记录。</li>
+<li>DCL（Data Control Language，数据控制语言）用来确认或者取消对数据
+库中的数据进行的变更，以及对RDBMS的用户权限设置。</li>
+</ul>
+<p>SQL的基本书写规则：</p>
+<ul>
+<li>SQL语句要以分号（;）结尾；</li>
+<li>SQL语句不区分大小写；</li>
+<li>单词需要用半角空格或者换行来分隔</li>
+</ul>
+<div id="创建数据库表" class="section level2">
+<h2>创建数据库表</h2>
+<pre class="sql"><code>-- 创建一个名为 samp_db 的数据库，数据库字符编码指定为 gbk
+create database samp_db character set gbk;
+drop database samp_db; -- 删除 库名为samp_db的库
+show databases;        -- 显示数据库列表。
+use samp_db;     -- 选择创建的数据库samp_db
+show tables;     -- 显示samp_db下面所有的表名字
+describe 表名;    -- 显示数据表的结构
+delete from 表名; -- 清空表中记录
+/*多行注释
+*/</code></pre>
+<pre class="sql"><code>DROP TABLE IF EXISTS `user_accounts`;
+CREATE TABLE `user_accounts` (
+  `id`             int(100) unsigned NOT NULL AUTO_INCREMENT primary key,
+  `password`       varchar(32)       NOT NULL DEFAULT &#39;&#39; COMMENT &#39;用户密码&#39;,
+  `reset_password` tinyint(32)       NOT NULL DEFAULT 0 COMMENT &#39;用户类型：0－不需要重置密码；1-需要重置密码&#39;,
+  `mobile`         varchar(20)       NOT NULL DEFAULT &#39;&#39; COMMENT &#39;手机&#39;,
+  `create_at`      timestamp(6)      NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `update_at`      timestamp(6)      NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  -- 创建唯一索引，不允许重复
+  UNIQUE INDEX idx_user_mobile(`mobile`) -- 索引名字 ( `字段名字` )
+)
+COMMENT=&#39;用户表信息&#39;;</code></pre>
+<p>数据约束设置：</p>
+<ul>
+<li><code>NULL</code>：数据列可包含NULL值；</li>
+<li><code>NOT NULL</code>：数据列不允许包含NULL值；</li>
+<li><code>DEFAULT</code>：默认值；</li>
+<li><code>PRIMARY KEY</code>：主键；</li>
+<li><code>AUTO_INCREMENT</code>：自动递增，适用于整数类型；</li>
+<li><code>UNSIGNED</code>：是指数值类型只能为正数；</li>
+<li><code>CHARACTER SET name</code>：指定一个字符集；</li>
+<li><code>COMMENT</code>：对表或者字段说明；</li>
+</ul>
+<div id="插入数据" class="section level3">
+<h3>插入数据</h3>
+<pre class="sql"><code>insert into user_accounts(password, mobile) values (&#39;123456&#39;, &#39;13910109019&#39;);</code></pre>
+</div>
+<div id="表的删除和更新" class="section level3">
+<h3>表的删除和更新</h3>
+<pre class="sql"><code>DROP TABLE &lt;表名&gt;；
+ALTER TABLE &lt;表名&gt; ADD COLUMN &lt;列的定义&gt;；
+ALTER TABLE &lt;表名&gt; DROP COLUMN &lt;列名&gt;；</code></pre>
+</div>
+</div>
+<div id="select语句基础" class="section level2">
+<h2>SELECT语句基础</h2>
+<p>先制作一个数据集，写入数据库中。</p>
+<pre class="r"><code>team &lt;- data.frame(name=c(&quot;John&quot;,&quot;Alice&quot;, &quot;Max&quot;,&quot;Foo&quot;,&quot;Andrew&quot;,&quot;Hans&quot;),
+                   height=c(1.8,1.66,1.71,1.73,1.68,1.81),
+                   age=c(20,23,21,26,19,25))
+dbSendQuery(myDb, &#39;DROP TABLE IF EXISTS `team`;&#39;)</code></pre>
+<pre><code>## &lt;MariaDBResult&gt;
+##   SQL  DROP TABLE IF EXISTS `team`;
+##   ROWS Fetched: 0 [complete]
+##        Changed: 0</code></pre>
+<pre class="r"><code>dbWriteTable(myDb, value = team, row.names = FALSE, name = &quot;team&quot;, append = FALSE)</code></pre>
+<pre class="r"><code>rsps = dbSendQuery(myDb, &quot;SELECT * from team&quot;)
+dbFetch(rsps, n = 3)</code></pre>
+<pre><code>##    name height age
+## 1  John   1.80  20
+## 2 Alice   1.66  23
+## 3   Max   1.71  21</code></pre>
+<pre class="sql"><code>-- 设置别名
+select name as &#39;姓名&#39;,
+height as &#39;身高&#39;,
+age as &#39;年龄&#39;
+from team;
+
+-- 选择常数
+select name as &#39;姓名&#39;, &#39;南开中学&#39; as &#39;学校&#39;, &#39;2021&#39; as &#39;年&#39;;
+
+-- 去除重复记录
+select distinct name, height from team;
+
+-- where语句
+select name, height 
+from team
+where age = 20;
+
+select *
+from team
+where age &lt;&gt; 20;
+
+-- 与或非
+select *
+from team
+where not age &gt; 20;
+
+select *
+from team
+where age &lt;&gt; 20
+and height &gt; 1.7;
+
+select *
+from team
+where age &lt;&gt; 20
+and (height &gt; 1.8
+or height &lt; 1.7);</code></pre>
+</div>
+<div id="聚合与排序" class="section level2">
+<h2>聚合与排序</h2>
+<p>使用聚合函数时，SELECT 子句中只能存在以下三种元素：</p>
+<ul>
+<li>常数</li>
+<li>聚合函数</li>
+<li>GROUP BY子句中指定的列名（也就是聚合键）</li>
+</ul>
+<pre class="sql"><code>select count(*) from team;
+
+select avg(age) as avg_age, avg(distinct age), count(distinct age),
+sum(age), min(age), max(age) from team;
+
+select age, count(*), avg(height) 
+from team group by age;
+
+--  先执行WHERE再执行GROUP BY 
+select age, count(*)
+from team
+where height &gt; 1.7
+group by age;</code></pre>
+<p>为聚合结果指定条件，使用 HAVING 子句时 SELECT 语句的书写顺序：SELECT → FROM
+→ WHERE → GROUP BY → HAVING。HAVING 子句和包含 GROUP BY 子句时的 SELECT
+子句一样，能够使用的要素有一定的限制，限制内容也是完全相同的。</p>
+<pre class="sql"><code>select age, count(*) as n
+from team
+where height &gt; 1.7
+group by age
+having n &gt; 2;</code></pre>
+<p>WHERE 和 HAVING 的区别：</p>
+<ul>
+<li>WHERE 子句 = 指定行所对应的条件</li>
+<li>HAVING 子句 = 指定组所对应的条件</li>
+</ul>
+<pre class="sql"><code>-- 排序默认升序
+select * from team
+order by age, height desc</code></pre>
+<p>ORDER BY 子句中也可以使用存在于表中、但并不包含在 SELECT子句之中的列。</p>
+<p>子句的书写顺序: 1.SELECT 子句 → 2.FROM 子句 → 3.WHERE 子句 → 4.GROUP BY
+子句 → 5.HAVING 子句 → 6.ORDER BY 子句。</p>
+<p>使用 HAVING 子句时 SELECT 语句的执行顺序：FROM → WHERE → GROUP BY →
+HAVING → SELECT → ORDER BY。</p>
+</div>
+<div id="数据更新" class="section level2">
+<h2>数据更新</h2>
+<div id="insert" class="section level3">
+<h3>INSERT</h3>
+<pre class="sql"><code>-- INSERT INTO &lt;表名&gt; (列1, 列2, 列3, ……) VALUES (值1, 值2, 值3, ……);
+insert into team values select * from another_team;</code></pre>
+<p>对表进行全列 INSERT 时，可以省略表名后的列清单。</p>
+</div>
+<div id="delete" class="section level3">
+<h3>DELETE</h3>
+<pre class="sql"><code>-- 清空表
+DELETE FROM table_name;
+-- 或者
+DELETE * FROM table_name;
+
+DELETE FROM team WHERE age = 20;</code></pre>
+<p>DELETE 语句会留下表（容器），而删除表中的全部数据</p>
+</div>
+<div id="update" class="section level3">
+<h3>UPDATE</h3>
+<pre class="sql"><code>-- UPDATE &lt;表名&gt;
+-- SET &lt;列名1&gt; = &lt;表达式1&gt;,
+-- &lt;列名2&gt; = &lt;表达式2&gt;
+-- WHERE &lt;条件&gt;;
+
+update team 
+set height = 1.75
+where age &gt; 23;</code></pre>
+</div>
+</div>
+<div id="复杂查询" class="section level2">
+<h2>复杂查询</h2>
+<div id="视图" class="section level3">
+<h3>视图</h3>
+<p>从SQL的角度来看，视图和表是相同的，两者的区别在于表中保存的是实际的数据，而视图中保存的是SELECT语句（视图本身并不存储数据）。使用视图，可以轻松完成跨多表查询数据等复杂操作。可以将常用的SELECT语句做成视图来使用。</p>
+<p>语法如下：</p>
+<pre class="sql"><code>-- CREATE VIEW 视图名称(&lt;视图列名1&gt;, &lt;视图列名2&gt;, ……)
+-- AS
+-- &lt;SELECT语句&gt;;
+
+creat view vteam(v_age, v_name)
+as
+select age, name from team;
+
+select * from vteam;
+
+-- 删除视图
+-- DROP VIEW 视图名称</code></pre>
+</div>
+<div id="子查询" class="section level3">
+<h3>子查询</h3>
+<p>一言以蔽之，子查询就是一次性视图（SELECT语句）。与视图不同，子查询在SELECT语句执行完毕之后就会消失。</p>
+<pre class="sql"><code>-- 子查询
+select * from
+(select name, age from team
+where age &gt; 21) as subteam;</code></pre>
+<p>能够使用常数或者列名的地方，无论是 SELECT 子句、GROUP BY 子句、HAVING
+子句，还是 ORDER BY 子句，几乎所有的地方都可以使用标量子查询。</p>
+<pre class="sql"><code>-- 标量子查询
+select name, age from team
+where age &gt; (select avg(age) from team);</code></pre>
+<p>关联子查询会在细分的组内进行比较时使用。关联子查询和GROUP
+BY子句一样，也可以对表中的数据进行切分。关联子查询的结合条件如果未出现在子查询之中就会发生错误。</p>
+<pre class="sql"><code>select * from 
+team as P1
+where height from (
+select avg(height) from team as P2
+where P1.age = P2.age
+group by = age
+);
+-- Oracle中不能使用AS（会发生错误）</code></pre>
+</div>
+</div>
+<div id="sql函数" class="section level2">
+<h2>SQL函数</h2>
+<p>函数大致可以分为以下几种：</p>
+<ul>
+<li>算术函数（用来进行数值计算的函数）：abs,mod,round</li>
+<li>字符串函数（用来进行字符串操作的函数）: ||, CONCAT, LENGTH,
+LOWER,UPPER,REPLACE,SUBSTRING</li>
+<li>日期函数（用来进行日期操作的函数）:
+CURRENT_DATE,CURRENT_TIME,CURRENT_TIMESTAMP,EXTRACT</li>
+<li>转换函数（用来转换数据类型和值的函数）: CAST,COALESCE</li>
+<li>聚合函数（用来进行数据聚合的函数）</li>
+</ul>
+</div>
+<div id="谓词" class="section level2">
+<h2>谓词</h2>
+<p>谓词（predicate）就是返回值为真值的函数。主要包括 LIKE、 BETWEEN、IS
+NULL、IS NOT NULL、IN、EXISTS。</p>
+<pre class="sql"><code>CREATE TABLE strsample
+( strcol VARCHAR(6) NOT NULL,
+  PRIMARY KEY (strcol));
+  
+INSERT INTO strsample (strcol) VALUES (&#39;abcddd&#39;),(&#39;dddabc&#39;),(&#39;abdddc&#39;),(&#39;ddabcd&#39;);
+
+select * from strsample where strcol like &#39;%abc%&#39;;
+-- &#39;abc%&#39;, &#39;%abc&#39;, &#39;abc___&#39;</code></pre>
+<pre class="sql"><code>-- between
+select * from team where age beween 20 and 23;
+-- is null / is not null
+select * from team where age is null;
+-- in / not in
+select * from team where age in (20,25);</code></pre>
+<div id="exist" class="section level3">
+<h3>EXIST</h3>
+<p>EXIST 的语法理解起来比较困难，实际上即使不使用 EXIST，基本上也都可以使用
+IN（或者 NOT IN）来代替。</p>
+<p>通常指定关联子查询作为EXIST的参数。 EXIST 只关心记录是否存在，因此返回哪些列都没 有关系。</p>
+<pre class="sql"><code>SELECT product_name, sale_price
+  FROM Product AS P
+ WHERE EXISTS (SELECT *
+                 FROM ShopProduct AS SP
+                WHERE SP.shop_id = &#39;000C&#39;
+                  AND SP.product_id = P.product_id);</code></pre>
+</div>
+</div>
+<div id="case表达式" class="section level2">
+<h2>CASE表达式</h2>
+<p>CASE 表达式是在区分情况时使用的，这种情况的区分在编程中通常称为（条件）分支。</p>
+<pre class="sql"><code>CASE WHEN &lt;求值表达式&gt; THEN &lt;表达式&gt;
+     WHEN &lt;求值表达式&gt; THEN &lt;表达式&gt;
+     WHEN &lt;求值表达式&gt; THEN &lt;表达式&gt;
+       .
+       .
+       .
+     ELSE &lt;表达式&gt;
+END
+
+-- 举例
+SELECT SUM(CASE WHEN product_type = &#39;衣服&#39; 
+    THEN sale_price ELSE 0 END) AS sum_price_clothes,
+  SUM(CASE WHEN product_type = &#39;厨房用具&#39; 
+    THEN sale_price ELSE 0 END) AS sum_price_kitchen,
+  SUM(CASE WHEN product_type = &#39;办公用品&#39; 
+    THEN sale_price ELSE 0 END) AS sum_price_office
+  FROM Product;</code></pre>
+</div>
+<div id="集合运算" class="section level2">
+<h2>集合运算</h2>
+<p>集合运算就是对满足同一规则的记录进行的加减等四则运算。使用UNION（并集）、INTERSECT（交集）、EXCEPT（差集）等集合运算符来进行集合运算。集合运算符可以去除重复行。如果希望集合运算符保留重复行，就需要使用ALL选项。</p>
+<p>注意事项：
+- 作为运算对象的记录的列数必须相同
+- 作为运算对象的记录中列的类型必须一致
+- 可以使用任何SELECT语句，但ORDER BY子句只能在最后使用一次</p>
+<pre class="sql"><code>SELECT product_id, product_name
+  FROM Product
+UNION
+SELECT product_id, product_name
+  FROM Product2;
+  
+SELECT product_id, product_name
+  FROM Product
+INTERSECT
+SELECT product_id, product_name
+  FROM Product2
+ORDER BY product_id;</code></pre>
+<p>联结（JOIN）就是将其他表中的列添加过来，进行“添加列”的集合运算。UNION是以行（纵向）为单位进行操作，而联结则是以列（横向）为单位进行的。联结大体上分为内联结和外联结两种。</p>
+<pre class="sql"><code>SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name,
+P.sale_price
+FROM ShopProduct AS SP INNER JOIN Product AS P
+    ON SP.product_id = P.product_id;</code></pre>
+<pre class="sql"><code>SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name,
+P.sale_price
+  FROM ShopProduct AS SP RIGHT OUTER JOIN Product AS P
+    ON SP.product_id = P.product_id;</code></pre>
+<p>外联结最终的结果中会包含主表内所有的数据。指定主表的关键字是 LEFT 和
+RIGHT。顾名思义，使用 LEFT 时 FROM 子句中写在左侧的表是主表，使用
+RIGHT时右侧的表是主表。</p>
+<pre class="sql"><code>-- 联结表的数量没有限制
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name,
+P.sale_price, IP.inventory_quantity
+  FROM ShopProduct AS SP INNER JOIN Product AS P
+    ON SP.product_id = P.product_id
+          INNER JOIN InventoryProduct AS IP
+             ON SP.product_id = IP.product_id
+ WHERE IP.inventory_id = &#39;P001&#39;;</code></pre>
+</div>
+<div id="sql高级处理" class="section level2">
+<h2>SQL高级处理</h2>
+<div id="窗口函数" class="section level3">
+<h3>窗口函数</h3>
+<p>窗口函数也称为 OLAP 函数，OLAP 是 OnLine Analytical Processing
+的简称，意思是对数据库数据进行实时分析处理。原则上窗口函数只能在SELECT子句中使用。</p>
+<pre class="sql"><code>&lt;窗口函数&gt; OVER ([PARTITION BY &lt;列清单&gt;] 
+                     ORDER BY &lt;排序用列清单&gt;)</code></pre>
+<pre class="sql"><code>SELECT product_name, product_type, sale_price,
+       RANK () OVER (PARTITION BY product_type
+                         ORDER BY sale_price) AS ranking
+  FROM Product;</code></pre>
+<p>PARTITION BY 在横向上对表进行分组，而 ORDER BY决定了纵向排序的规则。通过 PARTITION BY分组后的记录集合称为窗口。此处的窗口并非“窗户”的意思，而是代表范围。这也是“窗口函数”名称的由来。</p>
+<p>PARTITION BY 并不是必需的，即使不指定也可以正常使用窗口函数。OVER
+子句中的 ORDER BY只是用来决定窗口函数按照什么样的顺序进行计算的，对结果的排列顺序并没有影响。</p>
+<pre class="sql"><code>SELECT product_name, product_type, sale_price, 
+  RANK () OVER (ORDER BY sale_price) AS ranking,
+  DENSE_RANK () OVER (ORDER BY sale_price) AS dense_ranking,
+  ROW_NUMBER () OVER (ORDER BY sale_price) AS row_num
+ FROM Product;</code></pre>
+<pre class="sql"><code>SELECT product_name, product_type, sale_price, 
+       RANK () OVER (ORDER BY sale_price) AS ranking
+  FROM Product
+ ORDER BY ranking;</code></pre>
+<p>所有的聚合函数都能用作窗口函数，其语法和专用窗口函数完全相同。但是采用的是累计的统计方法，只统计自身记录以及“排在自己之上”的记录。</p>
+</div>
+<div id="grouping运算符" class="section level3">
+<h3>GROUPING运算符</h3>
+<p>GROUPING运算符可以同时得出小计和合计，包括：ROLLUP，CUBE，GROUPING
+SETS。</p>
+<pre class="sql"><code>SELECT product_type, regist_date, SUM(sale_price) AS sum_price
+  FROM Product
+ GROUP BY ROLLUP(product_type, regist_date);</code></pre>
+<p>SELECT 语句的ROLLUP结果相当于使用 UNION 对如下 3 种模式的聚合级的不同
+结果进行连接：</p>
+<ul>
+<li>GROUP BY ()</li>
+<li>GROUP BY (product_type)</li>
+<li>GROUP BY (product_type, regist_date)</li>
+</ul>
+<pre class="sql"><code>-- GROUPING 函数在其参数列的值为超级分组记录所产生的NULL 时返回1，其他情况返回0
+SELECT CASE WHEN GROUPING(product_type) = 1 
+            THEN &#39;商品种类 合计&#39; 
+            ELSE product_type END AS product_type,
+       CASE WHEN GROUPING(regist_date) = 1 
+            THEN &#39;登记日期 合计&#39; 
+            ELSE CAST(regist_date AS VARCHAR(16)) END AS regist_date, 
+            -- 是为了满足 CASE 表达式所有分支的返回值类型必须一致的条件
+       SUM(sale_price) AS sum_price
+  FROM Product
+ GROUP BY ROLLUP(product_type, regist_date);</code></pre>
+<p>CUBE 的语法和 ROLLUP 相同，只需要将 ROLLUP 替换为 CUBE
+就可以了。CUBE所得到的汇总结果是以下四种聚合的连接：</p>
+<ul>
+<li>GROUP BY ()</li>
+<li>ROUP BY (product_type)</li>
+<li>GROUP BY (regist_date) &lt;- 新增</li>
+<li>GROUP BY (product_type, regist_date)</li>
+</ul>
+<p>所谓 CUBE，就是将 GROUP BY 子句中聚合键的“所有可能的组合”
+的汇总结果集中到一个结果中。因此，组合的个数就是 <span class="math inline">\(2^n\)</span> （n 是聚合键的
+个数）。</p>
+<p>如果希望聚合字段各自作为聚合键的结果，或者不想得到“合计记录和使用 2
+个聚合键的记录”时，可以使用 GROUPING SETS，但不常用。</p>
+</div>
+</div>
+</div>
+<div id="参考资料" class="section level1">
+<h1>参考资料</h1>
+<ul>
+<li><a href="https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r">Introduction to MySQL with
+R</a></li>
+<li><a href="https://db.rstudio.com/getting-started/connect-to-database/">Database Using
+R</a></li>
+<li><a href="https://dbi.r-dbi.org/">DBI</a></li>
+<li><a href="https://github.com/jaywcjlove/mysql-tutorial/blob/master/21-minutes-MySQL-basic-entry.md">21分钟MySQL基础入门</a></li>
+<li><a href="https://r4ds.had.co.nz/">R4DS</a></li>
+<li><a href="https://bookdown.org/xiangyun/msg/foreword.html">现代统计图形</a></li>
+</ul>
+</div>

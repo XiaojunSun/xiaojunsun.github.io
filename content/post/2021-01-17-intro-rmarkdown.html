@@ -273,9 +273,13 @@ my_add(100, 200)</code></pre>
 </div>
 <div id="插入sql" class="section level2">
 <h2>插入SQL</h2>
-<p>参考<a href="https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r">Introduction to MySQL with R</a> 和 <a href="https://db.rstudio.com/getting-started/connect-to-database/">Database Using R</a>。</p>
+<ul>
+<li><a href="https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r">Introduction to MySQL with R</a>;</li>
+<li><a href="https://db.rstudio.com/getting-started/connect-to-database/">Database Using R</a>;</li>
+<li><a href="https://github.com/jaywcjlove/mysql-tutorial/blob/master/21-minutes-MySQL-basic-entry.md">21分钟MySQL基础入门</a></li>
+</ul>
 <pre class="r"><code>library(RMariaDB)</code></pre>
-<pre><code>## Warning: package &#39;RMariaDB&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: 程辑包&#39;RMariaDB&#39;是用R版本4.0.4 来建造的</code></pre>
 <pre class="r"><code>myDb &lt;- dbConnect(RMariaDB::MariaDB(),
                        user=&#39;root&#39;, password=&#39;123456&#39;,
                        host=&#39;localhost&#39;, port=&#39;3306&#39;,
